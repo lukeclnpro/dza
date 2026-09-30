@@ -18,6 +18,8 @@ Après connexion, ouvrir **Paramètres** et saisir le code administrateur `01062
 
 Le catalogue de marché est stocké dans la table `market_assets` de SQLite et initialisé au démarrage. Il comprend 28 cryptos, dont BTC, ETH, BNB, XRP, SOL, ADA, DOGE, SHIB, XLM, ATOM, UNI, NEAR, APT, OP et ARB. Les cours restent soumis à la disponibilité Yahoo Finance.
 
+À l’achat d’une crypto, l’ordre se saisit en montant EUR et la quantité est calculée au cours estimé. Pour vendre une crypto, la quantité détenue reste utilisée; actions et ETF se saisissent également en quantité.
+
 ## Accès public via le routeur
 
 Pour une démonstration temporaire sur Internet, lancer :

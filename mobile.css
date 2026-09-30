@@ -1,0 +1,283 @@
+@media (max-width: 800px) {
+  html,
+  body {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .auth-story {
+    padding: 17px 18px 13px;
+  }
+
+  .auth-brand {
+    margin-bottom: 0;
+  }
+
+  .auth-story-copy {
+    margin: 21px 0 10px;
+  }
+
+  .auth-story-copy h1 {
+    margin-bottom: 7px;
+    font-size: 25px;
+  }
+
+  .auth-story-copy > p:last-child {
+    font-size: 11px;
+    line-height: 1.55;
+  }
+
+  .auth-chart {
+    display: none;
+  }
+
+  .auth-disclaimer {
+    margin-top: 9px;
+    font-size: 9px;
+    line-height: 1.5;
+  }
+
+  .auth-side {
+    padding: 19px 18px 32px;
+  }
+
+  .auth-description {
+    margin-bottom: 16px;
+    font-size: 12px;
+  }
+
+  .auth-switch button {
+    min-height: 40px;
+  }
+
+  .auth-panel .field-input,
+  .field-input,
+  .field-select,
+  .filter-select {
+    min-height: 43px;
+    font-size: 12px;
+  }
+
+  .auth-submit {
+    min-height: 46px;
+  }
+
+  .mobile-menu {
+    width: 40px;
+    height: 40px;
+    flex-basis: 40px;
+  }
+
+  .main-area {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom));
+  }
+
+  .mobile-bottom-nav {
+    min-height: calc(64px + env(safe-area-inset-bottom));
+    padding: 5px 8px max(6px, env(safe-area-inset-bottom));
+  }
+
+  .mobile-nav-item {
+    min-height: 48px;
+    font-size: 10px;
+  }
+
+  .mobile-nav-item span {
+    font-size: 19px;
+  }
+
+  .page-content {
+    min-height: calc(100vh - 132px);
+    padding: 18px 13px 30px;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .dashboard-grid > * {
+    min-width: 0;
+  }
+
+  .panel-head {
+    min-height: 52px;
+  }
+
+  .table-wrap {
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .position-table,
+  .data-table {
+    min-width: 560px;
+  }
+
+  .admin-credit-form {
+    display: grid;
+    grid-template-columns: minmax(84px, 1fr) auto;
+    gap: 6px;
+    min-width: 190px;
+  }
+
+  .admin-credit-form .field-input {
+    min-width: 0;
+    min-height: 40px;
+    padding: 0 8px;
+  }
+
+  .admin-credit-form .button {
+    min-height: 40px;
+  }
+
+  .button,
+  .icon-button,
+  .logout-button,
+  .text-button,
+  .range-button {
+    min-height: 40px;
+  }
+
+  .toast-region {
+    right: 12px;
+    bottom: calc(76px + env(safe-area-inset-bottom));
+    left: 12px;
+  }
+
+  .toast {
+    width: 100%;
+  }
+
+  .modal-backdrop {
+    place-items: end center;
+    padding: 8px;
+  }
+
+  .trade-modal {
+    max-height: calc(100dvh - 16px);
+    border-radius: 8px 8px 5px 5px;
+  }
+}
+
+@media (max-width: 540px) {
+  html {
+    min-width: 0;
+  }
+
+  .auth-story {
+    padding: 14px 15px 10px;
+  }
+
+  .auth-story-copy {
+    margin: 16px 0 8px;
+  }
+
+  .auth-story-copy h1 {
+    font-size: 23px;
+  }
+
+  .auth-story-copy > p:last-child {
+    max-width: 36ch;
+  }
+
+  .auth-side {
+    padding: 16px 15px 28px;
+  }
+
+  .auth-panel h2 {
+    font-size: 21px;
+  }
+
+  .topbar {
+    height: 56px;
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  .topbar-actions {
+    gap: 4px;
+  }
+
+  .breadcrumb b {
+    max-width: 125px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .page-content {
+    padding: 16px 10px 26px;
+  }
+
+  .page-heading {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .page-heading > .button {
+    align-self: flex-start;
+    max-width: 100%;
+    min-height: 40px;
+    font-size: 10px;
+  }
+
+  .metric-grid {
+    gap: 7px;
+  }
+
+  .metric-card {
+    min-width: 0;
+    min-height: 96px;
+    padding: 10px;
+  }
+
+  .metric-value {
+    flex-wrap: wrap;
+    font-size: 16px;
+  }
+
+  .panel-head {
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 9px 11px;
+  }
+
+  .panel-title {
+    flex-wrap: wrap;
+  }
+
+  .footer-note {
+    padding: 11px 12px;
+    font-size: 8px;
+  }
+
+  .mobile-bottom-nav {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    padding-right: 4px;
+    padding-left: 4px;
+  }
+
+  .mobile-nav-item {
+    gap: 2px;
+    font-size: 9px;
+  }
+
+  .modal-body {
+    padding: 15px;
+  }
+
+  .modal-head {
+    padding: 16px 15px 13px;
+  }
+
+  .modal-actions {
+    position: sticky;
+    bottom: 0;
+    padding: 11px 15px max(13px, env(safe-area-inset-bottom));
+    background: #19211d;
+  }
+}

@@ -1,44 +1,44 @@
 const INITIAL_CASH = 1000;
 const STORAGE_KEY = 'simtrade-demo-v3';
 const seedAssets = [
-  { symbol: 'AAPL', name: 'Apple Inc.', type: 'ACTION', price: 190, close: 190, change: 0 },
-  { symbol: 'MSFT', name: 'Microsoft Corporation', type: 'ACTION', price: 420, close: 420, change: 0 },
-  { symbol: 'NVDA', name: 'NVIDIA Corporation', type: 'ACTION', price: 150, close: 150, change: 0 },
-  { symbol: 'AMZN', name: 'Amazon.com, Inc.', type: 'ACTION', price: 190, close: 190, change: 0 },
-  { symbol: 'TSLA', name: 'Tesla, Inc.', type: 'ACTION', price: 300, close: 300, change: 0 },
-  { symbol: 'SPY', name: 'SPDR S&P 500 ETF', type: 'ETF', price: 500, close: 500, change: 0 },
-  { symbol: 'BTC-USD', name: 'Bitcoin / USD', type: 'CRYPTO', price: 60000, close: 60000, change: 0 },
-  { symbol: 'ETH-USD', name: 'Ethereum / USD', type: 'CRYPTO', price: 2500, close: 2500, change: 0 },
-  { symbol: 'BNB-USD', name: 'BNB', type: 'CRYPTO', price: 600, close: 600, change: 0 },
-  { symbol: 'XRP-USD', name: 'XRP', type: 'CRYPTO', price: 2.5, close: 2.5, change: 0 },
-  { symbol: 'SOL-USD', name: 'Solana', type: 'CRYPTO', price: 150, close: 150, change: 0 },
-  { symbol: 'ADA-USD', name: 'Cardano', type: 'CRYPTO', price: 0.8, close: 0.8, change: 0 },
-  { symbol: 'DOGE-USD', name: 'Dogecoin', type: 'CRYPTO', price: 0.15, close: 0.15, change: 0 },
-  { symbol: 'DOT-USD', name: 'Polkadot', type: 'CRYPTO', price: 7, close: 7, change: 0 },
-  { symbol: 'LTC-USD', name: 'Litecoin', type: 'CRYPTO', price: 100, close: 100, change: 0 },
-  { symbol: 'BCH-USD', name: 'Bitcoin Cash', type: 'CRYPTO', price: 400, close: 400, change: 0 },
-  { symbol: 'LINK-USD', name: 'Chainlink', type: 'CRYPTO', price: 20, close: 20, change: 0 },
-  { symbol: 'AVAX-USD', name: 'Avalanche', type: 'CRYPTO', price: 35, close: 35, change: 0 },
-  { symbol: 'TRX-USD', name: 'TRON', type: 'CRYPTO', price: 0.2, close: 0.2, change: 0 },
-  { symbol: 'SHIB-USD', name: 'Shiba Inu', type: 'CRYPTO', price: 0.00002, close: 0.00002, change: 0 },
-  { symbol: 'XLM-USD', name: 'Stellar', type: 'CRYPTO', price: 0.3, close: 0.3, change: 0 },
-  { symbol: 'ATOM-USD', name: 'Cosmos Hub', type: 'CRYPTO', price: 8, close: 8, change: 0 },
-  { symbol: 'UNI-USD', name: 'Uniswap', type: 'CRYPTO', price: 10, close: 10, change: 0 },
-  { symbol: 'ETC-USD', name: 'Ethereum Classic', type: 'CRYPTO', price: 25, close: 25, change: 0 },
-  { symbol: 'ICP-USD', name: 'Internet Computer', type: 'CRYPTO', price: 12, close: 12, change: 0 },
-  { symbol: 'FIL-USD', name: 'Filecoin', type: 'CRYPTO', price: 6, close: 6, change: 0 },
-  { symbol: 'NEAR-USD', name: 'NEAR Protocol', type: 'CRYPTO', price: 6, close: 6, change: 0 },
-  { symbol: 'APT-USD', name: 'Aptos', type: 'CRYPTO', price: 9, close: 9, change: 0 },
-  { symbol: 'OP-USD', name: 'Optimism', type: 'CRYPTO', price: 2, close: 2, change: 0 },
-  { symbol: 'ARB-USD', name: 'Arbitrum', type: 'CRYPTO', price: 1, close: 1, change: 0 },
-  { symbol: 'HBAR-USD', name: 'Hedera', type: 'CRYPTO', price: 0.1, close: 0.1, change: 0 },
-  { symbol: 'VET-USD', name: 'VeChain', type: 'CRYPTO', price: 0.04, close: 0.04, change: 0 },
-  { symbol: 'ALGO-USD', name: 'Algorand', type: 'CRYPTO', price: 0.3, close: 0.3, change: 0 },
-  { symbol: 'AAVE-USD', name: 'Aave', type: 'CRYPTO', price: 150, close: 150, change: 0 }
+  { symbol: 'AAPL', name: 'Apple Inc.', type: 'ACTION' },
+  { symbol: 'MSFT', name: 'Microsoft Corporation', type: 'ACTION' },
+  { symbol: 'NVDA', name: 'NVIDIA Corporation', type: 'ACTION' },
+  { symbol: 'AMZN', name: 'Amazon.com, Inc.', type: 'ACTION' },
+  { symbol: 'TSLA', name: 'Tesla, Inc.', type: 'ACTION' },
+  { symbol: 'SPY', name: 'SPDR S&P 500 ETF', type: 'ETF' },
+  { symbol: 'BTC-USD', name: 'Bitcoin / USD', type: 'CRYPTO' },
+  { symbol: 'ETH-USD', name: 'Ethereum / USD', type: 'CRYPTO' },
+  { symbol: 'BNB-USD', name: 'BNB', type: 'CRYPTO' },
+  { symbol: 'XRP-USD', name: 'XRP', type: 'CRYPTO' },
+  { symbol: 'SOL-USD', name: 'Solana', type: 'CRYPTO' },
+  { symbol: 'ADA-USD', name: 'Cardano', type: 'CRYPTO' },
+  { symbol: 'DOGE-USD', name: 'Dogecoin', type: 'CRYPTO' },
+  { symbol: 'DOT-USD', name: 'Polkadot', type: 'CRYPTO' },
+  { symbol: 'LTC-USD', name: 'Litecoin', type: 'CRYPTO' },
+  { symbol: 'BCH-USD', name: 'Bitcoin Cash', type: 'CRYPTO' },
+  { symbol: 'LINK-USD', name: 'Chainlink', type: 'CRYPTO' },
+  { symbol: 'AVAX-USD', name: 'Avalanche', type: 'CRYPTO' },
+  { symbol: 'TRX-USD', name: 'TRON', type: 'CRYPTO' },
+  { symbol: 'SHIB-USD', name: 'Shiba Inu', type: 'CRYPTO' },
+  { symbol: 'XLM-USD', name: 'Stellar', type: 'CRYPTO' },
+  { symbol: 'ATOM-USD', name: 'Cosmos Hub', type: 'CRYPTO' },
+  { symbol: 'UNI-USD', name: 'Uniswap', type: 'CRYPTO' },
+  { symbol: 'ETC-USD', name: 'Ethereum Classic', type: 'CRYPTO' },
+  { symbol: 'ICP-USD', name: 'Internet Computer', type: 'CRYPTO' },
+  { symbol: 'FIL-USD', name: 'Filecoin', type: 'CRYPTO' },
+  { symbol: 'NEAR-USD', name: 'NEAR Protocol', type: 'CRYPTO' },
+  { symbol: 'APT-USD', name: 'Aptos', type: 'CRYPTO' },
+  { symbol: 'OP-USD', name: 'Optimism', type: 'CRYPTO' },
+  { symbol: 'ARB-USD', name: 'Arbitrum', type: 'CRYPTO' },
+  { symbol: 'HBAR-USD', name: 'Hedera', type: 'CRYPTO' },
+  { symbol: 'VET-USD', name: 'VeChain', type: 'CRYPTO' },
+  { symbol: 'ALGO-USD', name: 'Algorand', type: 'CRYPTO' },
+  { symbol: 'AAVE-USD', name: 'Aave', type: 'CRYPTO' }
 ];
 const defaultState = () => ({
   cash: INITIAL_CASH,
-  assets: seedAssets.map(asset => ({ ...asset, history: [], quoteFresh: false, estimated: true })),
+  assets: seedAssets.map(asset => ({ ...asset, price: 0, close: 0, change: 0, history: [], quoteFresh: false, estimated: false })),
   positions: [],
   orders: [],
   trades: [],
@@ -54,11 +54,7 @@ function loadState() {
     const saved = JSON.parse(localStorage.getItem(userStorageKey()));
     if (saved && typeof saved === 'object') {
       const defaults = defaultState();
-      return { ...defaults, ...saved, assets: defaults.assets.map(seed => {
-        const cached = saved.assets?.find(item => item.symbol === seed.symbol) || {};
-        const hasCachedPrice = Number.isFinite(cached.price) && cached.price > 0;
-        return { ...seed, ...cached, price: hasCachedPrice ? cached.price : seed.price, quoteFresh: false, estimated: true };
-      }) };
+      return { ...defaults, ...saved, assets: defaults.assets };
     }
   } catch (_) { /* Storage may be unavailable in private browsing. */ }
   return defaultState();
@@ -89,6 +85,9 @@ const number = value => Number(value || 0).toLocaleString('fr-FR', { minimumFrac
 const quoteNumber = value => Number.isFinite(Number(value)) && Number(value) > 0 ? number(value) : '—';
 const signed = value => `${value >= 0 ? '+' : ''}${number(value)}`;
 const asset = symbol => state.assets.find(item => item.symbol === symbol);
+const assetQuantity = (symbol, quantity) => asset(symbol)?.type === 'CRYPTO'
+  ? Number(quantity || 0).toLocaleString('fr-FR', { maximumFractionDigits: 8 })
+  : number(quantity);
 const position = symbol => state.positions.find(item => item.symbol === symbol);
 const openOrders = () => state.orders.filter(order => order.status === 'OPEN');
 const reservedCash = () => openOrders().filter(order => order.side === 'BUY').reduce((sum, order) => sum + order.reserved, 0);
@@ -98,13 +97,13 @@ const totalEquity = () => state.cash + positionsValue();
 const unrealizedPnl = () => state.positions.reduce((sum, item) => sum + ((asset(item.symbol)?.price || item.average) - item.average) * item.quantity, 0);
 const realizedPnl = () => state.trades.reduce((sum, trade) => sum + (trade.side === 'SELL' ? trade.pnl : 0), 0);
 const feeFor = gross => Math.max(1, gross * .001);
+const cryptoQuantityFor = (amountEUR, price) => Number.isFinite(amountEUR) && Number.isFinite(price) && amountEUR > 0 && price > 0 ? Math.floor((amountEUR / price) * 1e8) / 1e8 : 0;
 function save() {
   const preferences = {
     favorites: state.favorites,
     alerts: state.alerts,
     notifications: state.notifications,
     equityHistory: state.equityHistory,
-    assets: state.assets.map(({ symbol, price, close, change, high, low, volume, currency, marketTime, history }) => ({ symbol, price, close, change, high, low, volume, currency, marketTime, history }))
   };
   try { localStorage.setItem(userStorageKey(), JSON.stringify(preferences)); } catch (_) { /* Continue with an in-memory demo session. */ }
 }
@@ -127,8 +126,8 @@ function setQuoteBadge(status, timestamp = null) {
   const labels = {
     loading: 'Connexion au flux…',
     live: 'Yahoo Finance · cours reçus',
-    stale: 'Estimation locale · flux Yahoo partiel',
-    estimated: 'Estimation locale · Yahoo actualisé périodiquement',
+    stale: 'Yahoo Finance · flux partiel',
+    estimated: 'Dernier cours en cache · à actualiser',
     failed: 'Cours indisponible · estimation impossible'
   };
   badge.textContent = labels[status] || labels.failed;
@@ -287,7 +286,7 @@ function positionsTable(items = state.positions) {
     const price = quote?.price || 0;
     const value = price * item.quantity;
     const pnl = (price - item.average) * item.quantity;
-    return `<tr><td>${assetIdentity(item.symbol, quote?.name)}</td><td>${number(item.quantity)}</td><td>${number(item.average)}</td><td>${quoteNumber(price)}</td><td>${number(value)}</td><td class="${changeClass(pnl)}">${signed(pnl)}</td><td><button class="button small" data-trade="${item.symbol}" data-side="SELL" ${quote?.quoteFresh ? '' : 'disabled'}>Vendre</button></td></tr>`;
+    return `<tr><td>${assetIdentity(item.symbol, quote?.name)}</td><td>${assetQuantity(item.symbol, item.quantity)}</td><td>${number(item.average)}</td><td>${quoteNumber(price)}</td><td>${number(value)}</td><td class="${changeClass(pnl)}">${signed(pnl)}</td><td><button class="button small" data-trade="${item.symbol}" data-side="SELL" ${quote?.quoteFresh ? '' : 'disabled'}>Vendre</button></td></tr>`;
   }).join('');
   return `<div class="table-wrap"><table class="position-table"><thead><tr><th>ACTIF</th><th>QUANTITÉ</th><th>PRIX MOYEN</th><th>COURS</th><th>VALEUR</th><th>P&amp;L LATENT</th><th></th></tr></thead><tbody>${rows || `<tr><td colspan="7" class="table-empty">Aucune position pour le moment. Découvrez les marchés pour passer votre premier ordre.</td></tr>`}</tbody></table></div>`;
 }
@@ -314,10 +313,10 @@ function dashboardView() {
   return `${pageTitle(`Bonjour, ${currentUser?.displayName?.split(' ')[0] || 'trader'}`, 'Voici un aperçu de votre compte virtuel et des marchés.', `<button class="button ghost" data-open-help aria-haspopup="dialog">? Aide</button><span class="date-line">${new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</span>`)}
     <div class="metric-grid">${metricCard('CAPITAL TOTAL', money(totalEquity()), `<span class="${changeClass(pnl)}">${signed(pnl)} EUR</span> depuis le début`, '◈')}${metricCard('CASH DISPONIBLE', money(cashAvailable()), `${number(reservedCash())} EUR réservés`, '＄')}${metricCard('VALEUR DES POSITIONS', money(positionsValue()), `${state.positions.length} actif${state.positions.length > 1 ? 's' : ''} détenu${state.positions.length > 1 ? 's' : ''}`, '◫')}${metricCard('P&amp;L LATENT', `${signed(unrealizedPnl())} <small>EUR</small>`, `${state.positions.length} position${state.positions.length > 1 ? 's' : ''} ouverte${state.positions.length > 1 ? 's' : ''}`, '↗', changeClass(unrealizedPnl()))}</div>
     <div class="dashboard-grid"><div><div style="margin-bottom:14px">${chartPanel('Performance du portefeuille', 'Capital virtuel · aujourd’hui', chartSeries)}</div><section class="panel"><div class="panel-head"><div class="panel-title"><h2>Positions</h2><span class="panel-subtitle">${state.positions.length} ouverte${state.positions.length === 1 ? '' : 's'}</span></div><button class="button ghost small" data-view="portfolio">Tout voir <span class="icon-inline">→</span></button></div>${positionsTable()}</section>
-      <section class="panel"><div class="panel-head"><div class="panel-title"><h2>Dernières transactions</h2><span class="panel-subtitle">Exécutions simulées</span></div><button class="button ghost small" data-view="trades">Historique <span class="icon-inline">→</span></button></div>${state.trades.length ? `<div class="table-wrap"><table class="data-table"><thead><tr><th>ACTIF</th><th>SENS</th><th>QUANTITÉ</th><th>PRIX</th><th>DATE</th></tr></thead><tbody>${state.trades.slice(0, 4).map(trade => `<tr><td>${assetIdentity(trade.symbol, asset(trade.symbol)?.name)}</td><td class="${trade.side === 'BUY' ? 'positive' : 'negative'}">${trade.side === 'BUY' ? 'ACHAT' : 'VENTE'}</td><td>${number(trade.quantity)}</td><td>${number(trade.price)}</td><td>${new Date(trade.date).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</td></tr>`).join('')}</tbody></table></div>` : `<div class="empty-state"><b>Pas encore de transaction</b><p>Vos exécutions apparaîtront ici.</p></div>`}</section></div>
+      <section class="panel"><div class="panel-head"><div class="panel-title"><h2>Dernières transactions</h2><span class="panel-subtitle">Exécutions simulées</span></div><button class="button ghost small" data-view="trades">Historique <span class="icon-inline">→</span></button></div>${state.trades.length ? `<div class="table-wrap"><table class="data-table"><thead><tr><th>ACTIF</th><th>SENS</th><th>QUANTITÉ</th><th>PRIX</th><th>DATE</th></tr></thead><tbody>${state.trades.slice(0, 4).map(trade => `<tr><td>${assetIdentity(trade.symbol, asset(trade.symbol)?.name)}</td><td class="${trade.side === 'BUY' ? 'positive' : 'negative'}">${trade.side === 'BUY' ? 'ACHAT' : 'VENTE'}</td><td>${assetQuantity(trade.symbol, trade.quantity)}</td><td>${number(trade.price)}</td><td>${new Date(trade.date).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</td></tr>`).join('')}</tbody></table></div>` : `<div class="empty-state"><b>Pas encore de transaction</b><p>Vos exécutions apparaîtront ici.</p></div>`}</section></div>
       <div><section class="panel"><div class="panel-head"><div class="panel-title"><h2>Favoris</h2><span class="panel-subtitle">Watchlist</span></div><button class="button ghost small" data-view="watchlist">Voir tout →</button></div><div class="panel-body" style="padding-top:4px;padding-bottom:4px">${watchRows(state.favorites.slice(0, 4))}</div></section>
       <section class="panel"><div class="panel-head"><div class="panel-title"><h2>Carnet d'ordres</h2><span class="panel-subtitle">${marketLeader.symbol} · marché</span></div><span class="live-dot"></span></div><div class="panel-body"><div class="orderbook"><div class="orderbook-header"><span>PRIX (EUR)</span><span>QUANTITÉ</span><span>VALEUR</span></div>${bookRows(marketLeader, 'ask')}<div class="book-spread">Spread estimé · ${number(marketLeader.price * .0004)} EUR</div>${bookRows(marketLeader, 'bid')}</div><button class="button primary" style="width:100%;margin-top:13px" data-trade="${marketLeader.symbol}" data-side="BUY">Nouvel ordre <span class="icon-inline">↗</span></button></div></section>
-      <section class="panel"><div class="panel-head"><div class="panel-title"><h2>Ordres ouverts</h2><span class="panel-subtitle">${openOrders().length} en attente</span></div><button class="button ghost small" data-view="orders">Voir →</button></div>${openOrders().length ? `<div class="panel-body" style="padding-top:4px;padding-bottom:4px">${openOrders().slice(0, 3).map(order => `<div class="watch-row"><div>${assetIdentity(order.symbol, `${order.side === 'BUY' ? 'Achat' : 'Vente'} · ${order.type === 'LIMIT' ? 'limite' : order.type === 'STOP_LOSS' ? 'stop-loss' : 'take-profit'}`)}</div><div class="watch-price">${number(order.quantity)} × ${number(order.trigger)}</div><button class="text-button" data-cancel="${order.id}" aria-label="Annuler l'ordre">×</button></div>`).join('')}</div>` : `<div class="empty-state"><p>Aucun ordre en attente.</p></div>`}</section></div></div>`;
+      <section class="panel"><div class="panel-head"><div class="panel-title"><h2>Ordres ouverts</h2><span class="panel-subtitle">${openOrders().length} en attente</span></div><button class="button ghost small" data-view="orders">Voir →</button></div>${openOrders().length ? `<div class="panel-body" style="padding-top:4px;padding-bottom:4px">${openOrders().slice(0, 3).map(order => `<div class="watch-row"><div>${assetIdentity(order.symbol, `${order.side === 'BUY' ? 'Achat' : 'Vente'} · ${order.type === 'LIMIT' ? 'limite' : order.type === 'STOP_LOSS' ? 'stop-loss' : 'take-profit'}`)}</div><div class="watch-price">${assetQuantity(order.symbol, order.quantity)} × ${number(order.trigger)}</div><button class="text-button" data-cancel="${order.id}" aria-label="Annuler l'ordre">×</button></div>`).join('')}</div>` : `<div class="empty-state"><p>Aucun ordre en attente.</p></div>`}</section></div></div>`;
 }
 function compactVolume(value) {
   return new Intl.NumberFormat('fr-FR', { notation: 'compact', maximumFractionDigits: 1 }).format(Number(value) || 0);
@@ -371,11 +370,11 @@ function portfolioView() {
   return `${pageTitle('Portefeuille', 'Suivez vos positions ouvertes et leur performance simulée.', `<button class="button primary" data-view="markets"><span class="icon-inline">＋</span> Explorer les marchés</button>`)}<div class="metric-grid">${metricCard('CAPITAL TOTAL', money(totalEquity()), 'Cash + valeur des positions', '◈')}${metricCard('CASH DISPONIBLE', money(cashAvailable()), `${number(reservedCash())} EUR réservés`, '＄')}${metricCard('P&amp;L LATENT', `${signed(unrealizedPnl())} <small>EUR</small>`, 'Positions ouvertes', '↗', changeClass(unrealizedPnl()))}${metricCard('P&amp;L RÉALISÉ', `${signed(realizedPnl())} <small>EUR</small>`, 'Transactions clôturées', '✓', changeClass(realizedPnl()))}</div><div style="margin-bottom:14px">${chartPanel('Évolution du portefeuille', 'Capital virtuel · aujourd’hui', chartSeries)}</div><section class="panel"><div class="panel-head"><div class="panel-title"><h2>Positions ouvertes</h2><span class="panel-subtitle">${state.positions.length} actif${state.positions.length > 1 ? 's' : ''}</span></div></div>${positionsTable()}</section>`;
 }
 function ordersView() {
-  const rows = [...state.orders].sort((a, b) => new Date(b.date) - new Date(a.date)).map(order => `<tr><td>${assetIdentity(order.symbol, asset(order.symbol)?.name)}</td><td class="${order.side === 'BUY' ? 'positive' : 'negative'}">${order.side === 'BUY' ? 'ACHAT' : 'VENTE'}</td><td>${order.type === 'STOP_LOSS' ? 'STOP-LOSS' : order.type === 'TAKE_PROFIT' ? 'TAKE-PROFIT' : order.type === 'LIMIT' ? 'LIMITE' : 'MARCHÉ'}</td><td>${number(order.quantity)}</td><td>${number(order.trigger || asset(order.symbol).price)}</td><td><span class="${order.status === 'OPEN' ? 'neutral' : order.status === 'FILLED' ? 'positive' : 'negative'}">${order.status === 'OPEN' ? 'OUVERT' : order.status === 'FILLED' ? 'EXÉCUTÉ' : order.status === 'CANCELLED' ? 'ANNULÉ' : 'REJETÉ'}</span></td><td>${new Date(order.date).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</td><td>${order.status === 'OPEN' ? `<button class="button danger small" data-cancel="${order.id}">Annuler</button>` : '—'}</td></tr>`).join('');
+  const rows = [...state.orders].sort((a, b) => new Date(b.date) - new Date(a.date)).map(order => `<tr><td>${assetIdentity(order.symbol, asset(order.symbol)?.name)}</td><td class="${order.side === 'BUY' ? 'positive' : 'negative'}">${order.side === 'BUY' ? 'ACHAT' : 'VENTE'}</td><td>${order.type === 'STOP_LOSS' ? 'STOP-LOSS' : order.type === 'TAKE_PROFIT' ? 'TAKE-PROFIT' : order.type === 'LIMIT' ? 'LIMITE' : 'MARCHÉ'}</td><td>${assetQuantity(order.symbol, order.quantity)}</td><td>${number(order.trigger || asset(order.symbol).price)}</td><td><span class="${order.status === 'OPEN' ? 'neutral' : order.status === 'FILLED' ? 'positive' : 'negative'}">${order.status === 'OPEN' ? 'OUVERT' : order.status === 'FILLED' ? 'EXÉCUTÉ' : order.status === 'CANCELLED' ? 'ANNULÉ' : 'REJETÉ'}</span></td><td>${new Date(order.date).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</td><td>${order.status === 'OPEN' ? `<button class="button danger small" data-cancel="${order.id}">Annuler</button>` : '—'}</td></tr>`).join('');
   return `${pageTitle('Ordres', 'Consultez et gérez vos ordres de simulation.', `<button class="button primary" data-view="markets"><span class="icon-inline">＋</span> Nouvel ordre</button>`)}<div class="filters"><select class="filter-select" id="orderStatusFilter"><option value="ALL">Tous les statuts</option><option value="OPEN">Ouverts</option><option value="FILLED">Exécutés</option><option value="CANCELLED">Annulés</option></select><span class="panel-subtitle">${state.orders.length} ordre${state.orders.length !== 1 ? 's' : ''} au total</span></div><section class="panel"><div class="table-wrap"><table class="data-table"><thead><tr><th>ACTIF</th><th>SENS</th><th>TYPE</th><th>QUANTITÉ</th><th>PRIX DÉCLENCHEUR</th><th>STATUT</th><th>DATE</th><th></th></tr></thead><tbody id="ordersTableBody">${rows || `<tr><td colspan="8" class="table-empty">Aucun ordre. Les ordres que vous passerez apparaîtront ici.</td></tr>`}</tbody></table></div></section>`;
 }
 function tradesView() {
-  const rows = [...state.trades].sort((a, b) => new Date(b.date) - new Date(a.date)).map(trade => `<tr><td>${new Date(trade.date).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</td><td>${assetIdentity(trade.symbol, asset(trade.symbol)?.name)}</td><td class="${trade.side === 'BUY' ? 'positive' : 'negative'}">${trade.side === 'BUY' ? 'ACHAT' : 'VENTE'}</td><td>${number(trade.quantity)}</td><td>${number(trade.price)}</td><td>${number(trade.fee)}</td><td>${number(trade.gross)}</td><td class="${changeClass(trade.pnl)}">${trade.side === 'SELL' ? signed(trade.pnl) : '—'}</td></tr>`).join('');
+  const rows = [...state.trades].sort((a, b) => new Date(b.date) - new Date(a.date)).map(trade => `<tr><td>${new Date(trade.date).toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</td><td>${assetIdentity(trade.symbol, asset(trade.symbol)?.name)}</td><td class="${trade.side === 'BUY' ? 'positive' : 'negative'}">${trade.side === 'BUY' ? 'ACHAT' : 'VENTE'}</td><td>${assetQuantity(trade.symbol, trade.quantity)}</td><td>${number(trade.price)}</td><td>${number(trade.fee)}</td><td>${number(trade.gross)}</td><td class="${changeClass(trade.pnl)}">${trade.side === 'SELL' ? signed(trade.pnl) : '—'}</td></tr>`).join('');
   return `${pageTitle('Transactions', 'Historique de vos exécutions et frais de transaction.', `<button class="button ghost" id="exportCsv"><span class="icon-inline">↓</span> Exporter CSV</button>`)}<section class="panel"><div class="table-wrap"><table class="data-table"><thead><tr><th>DATE</th><th>ACTIF</th><th>SENS</th><th>QUANTITÉ</th><th>PRIX</th><th>FRAIS</th><th>VALEUR BRUTE</th><th>P&amp;L RÉALISÉ</th></tr></thead><tbody>${rows || `<tr><td colspan="8" class="table-empty">Aucune transaction pour le moment.</td></tr>`}</tbody></table></div></section>`;
 }
 function watchlistView() {
@@ -387,7 +386,7 @@ function escapeHtml(value) {
 }
 function communityTradesMarkup(trades) {
   if (!trades.length) return '<span class="community-no-activity">Aucune transaction publiée</span>';
-  return trades.map(trade => `<div class="community-activity-row"><span><b class="${trade.side === 'BUY' ? 'positive' : 'negative'}">${trade.side === 'BUY' ? 'ACHAT' : 'VENTE'}</b> · ${escapeHtml(trade.symbol)} · ${number(trade.quantity)} × ${number(trade.price)} EUR</span><time>${new Date(trade.date).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })}</time></div>`).join('');
+  return trades.map(trade => `<div class="community-activity-row"><span><b class="${trade.side === 'BUY' ? 'positive' : 'negative'}">${trade.side === 'BUY' ? 'ACHAT' : 'VENTE'}</b> · ${escapeHtml(trade.symbol)} · ${assetQuantity(trade.symbol, trade.quantity)} × ${number(trade.price)} EUR</span><time>${new Date(trade.date).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' })}</time></div>`).join('');
 }
 function communityView() {
   const following = communityTab === 'FOLLOWING';
@@ -602,10 +601,10 @@ function drawChart() {
   context.beginPath(); context.arc(x(values.length - 1), y(values[values.length - 1]), 3, 0, Math.PI * 2); context.fillStyle = color; context.fill();
 }
 function openTrade(symbol = 'AAPL', side = 'BUY') {
-  tradeDraft = { symbol, side, confirm: false };
+  tradeDraft = { symbol, side, confirm: false, amountEUR: 100 };
   renderTradeModal();
   document.getElementById('modalBackdrop').classList.remove('hidden');
-  document.querySelector('#tradeModal input[name="quantity"]')?.focus();
+  document.querySelector('#tradeModal input[name="amountEUR"], #tradeModal input[name="quantity"]')?.focus();
 }
 function renderTradeModalMarkup() {
   const item = asset(tradeDraft.symbol);
@@ -626,14 +625,38 @@ function renderTradeModalMarkup() {
   document.getElementById('tradeModal').innerHTML = `<div class="modal-head"><div><p class="eyebrow">Ordre de simulation · ${item.symbol}</p><h2 id="modalTitle">${confirmation ? 'Confirmer votre ordre' : `Passer un ordre ${isSell ? 'de vente' : 'd’achat'}`}</h2><p class="subheading">${item.name} · cours ${number(item.price)} EUR</p></div><button class="modal-close" data-close-modal aria-label="Fermer">×</button></div><div class="modal-body">${confirmation ? `<div class="notice" style="margin-bottom:15px">${isSell ? 'VENTE' : 'ACHAT'} · ${number(quantity)} ${item.symbol}<br>Type : ${types.find(option => option[0] === selectedType)?.[1]}${needsTrigger ? ` à ${number(limitValue)} EUR` : ` · prix estimé ${number(estimatedPrice)} EUR`}<br>Valeur brute estimée : ${number(gross)} EUR · frais : ${number(fee)} EUR</div><div class="modal-warning">Prix estimé. Le prix d’exécution simulé peut varier. Aucun ordre réel ne sera transmis.</div>` : `<div class="modal-tabs"><button class="${!isSell ? 'active buy' : ''}" data-side-switch="BUY">ACHETER</button><button class="${isSell ? 'active sell' : ''}" data-side-switch="SELL">VENDRE</button></div><div class="field-group"><label class="field-label" for="orderAsset">Actif fictif</label><select class="field-select" name="symbol" id="orderAsset">${state.assets.map(assetItem => `<option value="${assetItem.symbol}" ${assetItem.symbol === item.symbol ? 'selected' : ''}>${assetItem.symbol} · ${assetItem.name}</option>`).join('')}</select></div><div class="form-grid"><div class="field-group"><label class="field-label" for="orderQuantity">Quantité</label><input class="field-input" id="orderQuantity" name="quantity" type="number" min="0.01" step="0.01" value="${quantity}" required></div><div class="field-group"><label class="field-label" for="orderType">Type d’ordre</label><select class="field-select" name="type" id="orderType">${types.map(([value, label]) => `<option value="${value}" ${selectedType === value ? 'selected' : ''}>${label}</option>`).join('')}</select></div></div>${needsTrigger ? `<div class="field-group"><label class="field-label" for="orderTrigger">${triggerLabel} (EUR)</label><input class="field-input" id="orderTrigger" name="trigger" type="number" min="0.01" step="0.01" value="${limitValue}" required><p class="field-hint">${selectedType === 'LIMIT' ? isSell ? 'Exécution simulée lorsque le cours atteint ou dépasse ce prix.' : 'Exécution simulée lorsque le cours atteint ou passe sous ce prix.' : selectedType === 'STOP_LOSS' ? 'Vente simulée lorsque le cours passe sous ce seuil.' : 'Vente simulée lorsque le cours atteint ce seuil.'}</p></div>` : ''}<div class="estimate-box"><div class="estimate-line"><span>Prix ${selectedType === 'MARKET' ? 'estimé' : 'déclencheur'}</span><b>${number(estimatedPrice)} EUR</b></div><div class="estimate-line"><span>Valeur estimée</span><b>${number(gross)} EUR</b></div><div class="estimate-line"><span>Frais simulés</span><b>${number(fee)} EUR</b></div><div class="estimate-line total"><span>${isSell ? 'Produit net estimé' : 'Total estimé'}</span><b>${number(isSell ? gross - fee : gross + fee)}</b></div></div>${isSell ? `<p class="field-hint">Position disponible : ${number(Math.max(0, (currentPosition?.quantity || 0) - reservedQuantity(item.symbol)))} ${item.symbol}</p>` : `<p class="field-hint">Solde disponible : ${number(cashAvailable())} EUR · commission 0,10 %, minimum 1 EUR.</p>`}<div class="modal-warning">Prix estimé — le prix d’exécution simulé peut varier. Crédits virtuels uniquement.</div>`}</div><div class="modal-actions"><button class="button ghost" data-close-modal>${confirmation ? 'Modifier' : 'Annuler'}</button><button class="button ${isSell ? 'danger' : 'primary'}" id="submitTrade">${confirmation ? 'Confirmer l’ordre EUR' : 'Continuer'}</button></div>`;
 }
 function renderTradeModal() {
+  const modal = document.getElementById('tradeModal');
+  const existingAmount = modal.querySelector('input[name="amountEUR"]');
+  if (existingAmount && !tradeDraft.confirm) tradeDraft.amountEUR = Number(existingAmount.value);
   renderTradeModalMarkup();
   const item = asset(tradeDraft.symbol);
-  const modal = document.getElementById('tradeModal');
   const currency = item.currency || 'EUR';
   const type = tradeDraft.confirm ? tradeDraft.type : modal.querySelector('[name="type"]')?.value || 'MARKET';
-  const quantity = tradeDraft.confirm ? tradeDraft.quantity : Number(modal.querySelector('[name="quantity"]')?.value || 1);
   const trigger = tradeDraft.confirm ? tradeDraft.trigger : Number(modal.querySelector('[name="trigger"]')?.value || item.price);
   const price = type === 'MARKET' ? item.price * (tradeDraft.side === 'BUY' ? 1.0004 : .9996) : trigger;
+  const cryptoPurchase = item.type === 'CRYPTO' && tradeDraft.side === 'BUY';
+  const quantityField = modal.querySelector('input[name="quantity"]');
+  if (cryptoPurchase && quantityField) {
+    const label = modal.querySelector('label[for="orderQuantity"]');
+    quantityField.name = 'amountEUR';
+    quantityField.id = 'orderAmountEUR';
+    quantityField.min = '0.01';
+    quantityField.step = '0.01';
+    quantityField.value = String(tradeDraft.amountEUR || 100);
+    if (label) {
+      label.htmlFor = 'orderAmountEUR';
+      label.textContent = 'Montant à investir (EUR)';
+    }
+    const hint = document.createElement('p');
+    hint.className = 'field-hint';
+    hint.id = 'cryptoQuantityHint';
+    quantityField.parentElement.append(hint);
+  }
+  const amountField = modal.querySelector('input[name="amountEUR"]');
+  const quantity = tradeDraft.confirm ? tradeDraft.quantity : cryptoPurchase
+    ? cryptoQuantityFor(Number(amountField?.value || 0), price)
+    : Number(modal.querySelector('input[name="quantity"]')?.value || 1);
+  const amountEUR = tradeDraft.confirm ? tradeDraft.amountEUR : Number(amountField?.value || 0);
   const gross = price * quantity;
   const fee = feeFor(gross);
   const rows = modal.querySelectorAll('.estimate-line b');
@@ -645,6 +668,8 @@ function renderTradeModal() {
   if (assetLabel) assetLabel.textContent = 'Instrument';
   if (balanceHint) balanceHint.textContent = `Solde disponible : ${number(cashAvailable())} EUR · frais 0,10 % du montant, minimum 1,00 EUR.`;
   if (triggerLabel) triggerLabel.textContent = `${type === 'STOP_LOSS' ? 'Seuil stop-loss' : type === 'TAKE_PROFIT' ? 'Seuil take-profit' : 'Prix limite'} (${currency})`;
+  const cryptoHint = modal.querySelector('#cryptoQuantityHint');
+  if (cryptoHint) cryptoHint.textContent = `Quantité estimée : ${assetQuantity(item.symbol, quantity)} ${item.symbol}.`;
   if (rows.length) {
     rows[0].textContent = `${number(price)} ${currency}`;
     rows[1].textContent = `${number(gross)} ${currency}`;
@@ -652,7 +677,7 @@ function renderTradeModal() {
     rows[3].textContent = `${number(tradeDraft.side === 'SELL' ? gross - fee : gross + fee)} EUR`;
   }
   const confirmation = modal.querySelector('.notice');
-  if (confirmation) confirmation.innerHTML = `${tradeDraft.side === 'SELL' ? 'VENTE' : 'ACHAT'} · ${number(quantity)} ${item.symbol}<br>Prix estimé : ${number(price)} ${currency}<br>Valeur brute : ${number(gross)} ${currency} · frais : ${number(fee)} EUR<br>Total virtuel : ${number(tradeDraft.side === 'SELL' ? gross - fee : gross + fee)} EUR`;
+  if (confirmation) confirmation.innerHTML = `${tradeDraft.side === 'SELL' ? 'VENTE' : 'ACHAT'} · ${cryptoPurchase ? `${number(amountEUR)} EUR · ${assetQuantity(item.symbol, quantity)} ${item.symbol}` : `${assetQuantity(item.symbol, quantity)} ${item.symbol}`}<br>Prix estimé : ${number(price)} ${currency}<br>Valeur brute : ${number(gross)} ${currency} · frais : ${number(fee)} EUR<br>Total virtuel : ${number(tradeDraft.side === 'SELL' ? gross - fee : gross + fee)} EUR`;
   if (submitButton && !item.quoteFresh) submitButton.disabled = true;
   cleanTradingTree(modal);
 }
@@ -663,9 +688,12 @@ function updateTradeEstimate() {
   if (!item) return;
   const side = modal.querySelector('[data-side-switch].active')?.dataset.sideSwitch || tradeDraft.side;
   const type = modal.querySelector('[name="type"]')?.value || 'MARKET';
-  const quantity = Number(modal.querySelector('[name="quantity"]')?.value || 0);
+  const cryptoPurchase = item.type === 'CRYPTO' && side === 'BUY';
+  const amountEUR = Number(modal.querySelector('[name="amountEUR"]')?.value || 0);
+  const quantityInput = Number(modal.querySelector('[name="quantity"]')?.value || 0);
   const trigger = type === 'MARKET' ? item.price : Number(modal.querySelector('[name="trigger"]')?.value || item.price);
   const price = type === 'MARKET' ? item.price * (side === 'BUY' ? 1.0004 : .9996) : trigger;
+  const quantity = cryptoPurchase ? cryptoQuantityFor(amountEUR, price) : quantityInput;
   const gross = quantity * price;
   const fee = feeFor(gross);
   const rows = modal.querySelectorAll('.estimate-line b');
@@ -675,6 +703,8 @@ function updateTradeEstimate() {
     rows[2].textContent = `${number(fee)} EUR`;
     rows[3].textContent = `${number(side === 'SELL' ? gross - fee : gross + fee)} EUR`;
   }
+  const cryptoHint = modal.querySelector('#cryptoQuantityHint');
+  if (cryptoHint) cryptoHint.textContent = `Quantité estimée : ${assetQuantity(item.symbol, quantity)} ${item.symbol}.`;
 }
 function reservedQuantity(symbol) {
   return openOrders().filter(order => order.symbol === symbol && order.side === 'SELL').reduce((sum, order) => sum + order.quantity, 0);
@@ -688,35 +718,47 @@ function validateOrder() {
   if (!item?.quoteFresh) return 'Cours indisponible ou périmé : aucun ordre ne peut être simulé.';
   const side = tradeDraft.side;
   const type = document.querySelector('#tradeModal select[name="type"]')?.value || 'MARKET';
-  const quantity = Number(document.querySelector('#tradeModal input[name="quantity"]')?.value);
+  const cryptoPurchase = item.type === 'CRYPTO' && side === 'BUY';
+  const amountEUR = Number(document.querySelector('#tradeModal input[name="amountEUR"]')?.value);
+  const quantityInput = Number(document.querySelector('#tradeModal input[name="quantity"]')?.value);
   const trigger = type === 'MARKET' ? null : Number(document.querySelector('#tradeModal input[name="trigger"]')?.value);
-  if (!Number.isFinite(quantity) || quantity <= 0) return 'Saisissez une quantité supérieure à zéro.';
+  if (cryptoPurchase && (!Number.isFinite(amountEUR) || amountEUR <= 0 || amountEUR > 1_000_000)) return 'Saisissez un montant en EUR entre 0,01 et 1 000 000.';
+  if (!cryptoPurchase && (!Number.isFinite(quantityInput) || quantityInput <= 0)) return 'Saisissez une quantité supérieure à zéro.';
   if (type !== 'MARKET' && (!Number.isFinite(trigger) || trigger <= 0)) return 'Saisissez un prix de déclenchement valide.';
+  const referencePrice = type === 'MARKET' ? item.price * (side === 'BUY' ? 1.0004 : .9996) : trigger;
+  const quantity = cryptoPurchase ? cryptoQuantityFor(amountEUR, referencePrice) : quantityInput;
+  if (cryptoPurchase && quantity <= 0) return 'Montant trop faible pour acheter cette fraction de crypto.';
   if (side === 'SELL' && quantity > Math.max(0, (position(item.symbol)?.quantity || 0) - reservedQuantity(item.symbol))) return 'Position insuffisante pour cette vente.';
-  if (side === 'BUY' && type === 'MARKET' && quantity * item.price * 1.0004 + feeFor(quantity * item.price) > cashAvailable()) return 'Solde virtuel insuffisant pour cet achat.';
-  if (side === 'BUY' && type === 'LIMIT' && quantity * trigger + feeFor(quantity * trigger) > cashAvailable()) return 'Solde virtuel insuffisant pour réserver cet ordre limite.';
+  if (side === 'BUY' && (quantity * referencePrice + feeFor(quantity * referencePrice) > cashAvailable())) return 'Solde virtuel insuffisant pour cet achat.';
   return '';
 }
 async function submitTrade() {
+  const item = asset(tradeDraft.symbol);
   if (!tradeDraft.confirm) {
     tradeDraft.symbol = document.querySelector('#tradeModal select[name="symbol"]').value;
+    const selectedAsset = asset(tradeDraft.symbol);
     const problem = validateOrder();
     if (problem) { toast(problem, true); return; }
     tradeDraft.type = document.querySelector('#tradeModal select[name="type"]').value;
-    tradeDraft.quantity = Number(document.querySelector('#tradeModal input[name="quantity"]').value);
     tradeDraft.trigger = tradeDraft.type === 'MARKET' ? null : Number(document.querySelector('#tradeModal input[name="trigger"]').value);
+    tradeDraft.amountEUR = selectedAsset.type === 'CRYPTO' && tradeDraft.side === 'BUY'
+      ? Number(document.querySelector('#tradeModal input[name="amountEUR"]').value)
+      : null;
+    const referencePrice = tradeDraft.type === 'MARKET' ? item.price * (tradeDraft.side === 'BUY' ? 1.0004 : .9996) : tradeDraft.trigger;
+    tradeDraft.quantity = tradeDraft.amountEUR !== null
+      ? cryptoQuantityFor(tradeDraft.amountEUR, referencePrice)
+      : Number(document.querySelector('#tradeModal input[name="quantity"]').value);
     tradeDraft.confirm = true;
     renderTradeModal();
     return;
   }
-  const item = asset(tradeDraft.symbol);
   if (!item?.quoteFresh) { toast('Le cours n’est plus à jour. Réessaie après actualisation.', true); closeModal(); return; }
   try {
     const response = await fetch('/api/orders', {
       method: 'POST',
       credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ symbol: item.symbol, side: tradeDraft.side, type: tradeDraft.type, quantity: tradeDraft.quantity, trigger: tradeDraft.trigger })
+      body: JSON.stringify({ symbol: item.symbol, side: tradeDraft.side, type: tradeDraft.type, quantity: tradeDraft.quantity, amountEUR: tradeDraft.amountEUR, trigger: tradeDraft.trigger })
     });
     const result = await response.json();
     if (!response.ok) throw new Error(result.error || 'Ordre refusé.');
@@ -890,7 +932,7 @@ document.getElementById('tradeModal').addEventListener('change', event => {
   if (event.target.name === 'symbol' || event.target.name === 'type') renderTradeModal();
 });
 document.getElementById('tradeModal').addEventListener('input', event => {
-  if (event.target.name === 'quantity' || event.target.name === 'trigger') updateTradeEstimate();
+  if (event.target.name === 'quantity' || event.target.name === 'amountEUR' || event.target.name === 'trigger') updateTradeEstimate();
 });
 pageContent.addEventListener('submit', async event => {
   const form = event.target;

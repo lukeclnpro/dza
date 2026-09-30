@@ -239,6 +239,12 @@ def fee_for(gross: float) -> float:
     return max(1.0, gross * 0.001)
 
 
+def quantity_from_eur(amount: float, unit_price: float) -> float:
+    if not math.isfinite(amount) or not math.isfinite(unit_price) or amount <= 0 or unit_price <= 0:
+        raise ApiError(400, 'Montant EUR ou cours invalide.')
+    return math.floor((amount / unit_price) * 100_000_000) / 100_000_000
+
+
 def yahoo_chart(symbol: str) -> dict[str, Any]:
     cached = QUOTE_CACHE.get(symbol)
     if cached and time.monotonic() - cached[0] < QUOTE_TTL:
@@ -476,7 +482,7 @@ def limited(client: str) -> bool:
 
 class SimtradeHandler(BaseHTTPRequestHandler):
     server_version = 'SIMTRADE-Python/1.0'
-    public_files = {'/', '/index.html', '/styles.css', '/app.js'}
+    public_files = {'/', '/index.html', '/styles.css', '/mobile.css', '/app.js'}
 
     def _headers(self) -> None:
         self.send_header('X-Content-Type-Options', 'nosniff')
@@ -816,6 +822,7 @@ class SimtradeHandler(BaseHTTPRequestHandler):
         side = str(body.get('side', '')).upper()
         order_type = str(body.get('type', '')).upper()
         quantity = body.get('quantity')
+        amount_eur = body.get('amountEUR')
         trigger = body.get('trigger')
         selected = next((item for item in get_assets() if item['symbol'] == symbol), None)
         if not selected:
@@ -824,7 +831,14 @@ class SimtradeHandler(BaseHTTPRequestHandler):
             raise ApiError(400, 'Sens d’ordre invalide.')
         if order_type not in {'MARKET', 'LIMIT', 'STOP_LOSS', 'TAKE_PROFIT'} or (side == 'BUY' and order_type not in {'MARKET', 'LIMIT'}):
             raise ApiError(400, 'Type d’ordre invalide.')
-        if not isinstance(quantity, (int, float)) or isinstance(quantity, bool) or quantity <= 0 or quantity > 1_000_000:
+        crypto_purchase = selected['type'] == 'CRYPTO' and side == 'BUY'
+        if crypto_purchase:
+            if not isinstance(amount_eur, (int, float)) or isinstance(amount_eur, bool) or not math.isfinite(amount_eur):
+                raise ApiError(400, 'Saisissez un montant en EUR valide.')
+            amount_eur = round(float(amount_eur), 2)
+            if amount_eur <= 0 or amount_eur > 1_000_000:
+                raise ApiError(400, 'Le montant doit être compris entre 0,01 et 1 000 000 EUR.')
+        elif not isinstance(quantity, (int, float)) or isinstance(quantity, bool) or not math.isfinite(quantity) or quantity <= 0 or quantity > 1_000_000:
             raise ApiError(400, 'Quantité invalide.')
         if order_type != 'MARKET' and (not isinstance(trigger, (int, float)) or isinstance(trigger, bool) or trigger <= 0):
             raise ApiError(400, 'Prix déclencheur invalide.')
@@ -834,6 +848,13 @@ class SimtradeHandler(BaseHTTPRequestHandler):
             raise ApiError(503, 'Cours EUR indisponible; aucun ordre n’a été créé.')
         current = quote['price']
         trigger_value = None if order_type == 'MARKET' else float(trigger)
+        if crypto_purchase:
+            reference_price = current * 1.0004 if order_type == 'MARKET' else trigger_value
+            quantity = quantity_from_eur(amount_eur, reference_price)
+            if quantity <= 0:
+                raise ApiError(400, 'Montant trop faible pour acheter cette fraction de crypto.')
+            if quantity > 1_000_000_000_000:
+                raise ApiError(400, 'Quantité crypto calculée trop élevée.')
         immediate = order_type == 'MARKET'
         immediate |= order_type == 'LIMIT' and (current <= trigger_value if side == 'BUY' else current >= trigger_value)
         immediate |= order_type == 'STOP_LOSS' and current <= trigger_value
@@ -925,7 +946,7 @@ class SimtradeHandler(BaseHTTPRequestHandler):
         file_path = ROOT / name
         if not file_path.is_file():
             return self._error(404, 'Fichier introuvable.')
-        content_type = {'index.html': 'text/html; charset=utf-8', 'styles.css': 'text/css; charset=utf-8', 'app.js': 'text/javascript; charset=utf-8'}[name]
+        content_type = {'index.html': 'text/html; charset=utf-8', 'styles.css': 'text/css; charset=utf-8', 'mobile.css': 'text/css; charset=utf-8', 'app.js': 'text/javascript; charset=utf-8'}[name]
         data = file_path.read_bytes()
         self.send_response(200)
         self.send_header('Content-Type', content_type)
