@@ -1,0 +1,15 @@
+2026-09-30 23:55:26,979 INFO Démarrage demandé : port=1581, mode=manuel.
+2026-09-30 23:55:29,947 INFO Démarrage annulé par l’utilisateur.
+2026-09-30 23:55:31,922 INFO Démarrage demandé : port=1581, mode=manuel.
+2026-09-30 23:55:34,435 INFO Mode manuel : IP locale=192.168.1.10, passerelle=192.168.1.254, IP publique=89.92.202.140.
+2026-09-30 23:55:34,435 INFO Lancement de server.py sur 0.0.0.0:1581.
+2026-09-30 23:55:34,637 INFO Contrôle HTTP local réussi sur le port 1581.
+2026-10-01 00:03:42,967 INFO Démarrage demandé : port=1581, mode=manuel.
+2026-10-01 00:03:46,848 INFO Mode manuel : IP locale=192.168.1.10, passerelle=192.168.1.254, IP publique=89.92.202.140.
+2026-10-01 00:03:46,848 INFO Lancement de server.py sur 0.0.0.0:1581.
+2026-10-01 00:03:47,050 INFO Contrôle HTTP local réussi sur le port 1581.
+2026-10-01 00:07:15,413 INFO Arrêt demandé par l’utilisateur.
+2026-10-01 00:07:16,048 INFO Démarrage demandé : port=1581, mode=manuel.
+2026-10-01 00:07:19,349 INFO Mode manuel : IP locale=192.168.1.10, passerelle=192.168.1.254, IP publique=89.92.202.140.
+2026-10-01 00:07:19,349 INFO Lancement de server.py sur 0.0.0.0:1581.
+2026-10-01 00:07:19,551 INFO Contrôle HTTP local réussi sur le port 1581.

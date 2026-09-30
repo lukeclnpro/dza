@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111614">
+  <meta name="description" content="SIMTRADE, plateforme de trading fictive en environnement de démonstration.">
+  <title>SIMTRADE | Marchés</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css?v=quotes-3">
+</head>
+<body>
+  <section class="auth-gate" id="authGate">
+    <div class="auth-story">
+      <a class="brand auth-brand" href="#"><span class="brand-mark"><span></span><span></span><span></span></span><span>sim<span>trade</span></span></a>
+      <div class="auth-story-copy"><p class="eyebrow">COTATIONS DE MARCHÉ</p><h1>Les marchés.<br><span>À ton rythme.</span></h1><p>Observe les cours de marché, teste tes stratégies et suis ton portefeuille en euros.</p></div>
+      <div class="auth-chart"><div class="auth-chart-label"><span>INDICE DE MARCHÉ · 1 JOUR</span><b>MARKET FEED</b></div><div class="auth-chart-visual"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="auth-chart-foot"><span>NYSE · NASDAQ · CRYPTO</span><span>COURS POTENTIELLEMENT DIFFÉRÉS</span></div></div>
+      <p class="auth-disclaimer">Le solde affiché n’est pas réel. Aucun ordre n’est transmis à un marché. Cotations Yahoo Finance potentiellement différées.</p>
+    </div>
+    <div class="auth-side"><div class="auth-panel"><p class="eyebrow">ESPACE PERSONNEL</p><h2 id="authTitle">Créer mon accès</h2><p class="auth-description" id="authDescription">Crée un compte et commence avec 1 000 EUR.</p>
+      <div class="auth-switch"><button type="button" class="active" data-auth-mode="register">Créer un compte</button><button type="button" data-auth-mode="login">Connexion</button></div>
+      <form id="authForm">
+        <div class="field-group" id="authNameField"><label class="field-label" for="authDisplayName">Nom affiché</label><input class="field-input" id="authDisplayName" name="displayName" type="text" minlength="2" maxlength="50" autocomplete="name" placeholder="Ton nom" required></div>
+        <div class="field-group"><label class="field-label" for="authEmail">Adresse e-mail</label><input class="field-input" id="authEmail" name="email" type="email" autocomplete="email" placeholder="nom@exemple.fr" required></div>
+        <div class="field-group"><label class="field-label" for="authPassword">Mot de passe</label><input class="field-input" id="authPassword" name="password" type="password" minlength="10" maxlength="128" autocomplete="new-password" placeholder="10 caractères minimum" required><p class="field-hint" id="passwordHint">10 caractères minimum. Le mot de passe est haché localement par le service.</p></div>
+        <p class="auth-message" id="authMessage" role="status" aria-live="polite"></p>
+        <button class="button primary auth-submit" id="authSubmit" type="submit">Créer mon compte <span>→</span></button>
+      </form>
+      <p class="auth-privacy">Session protégée · Données de compte conservées sur ce serveur local.</p>
+    </div></div>
+  </section>
+
+  <div class="app-shell hidden" id="appShell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#dashboard" aria-label="SIMTRADE accueil">
+        <span class="brand-mark"><span></span><span></span><span></span></span>
+        <span>sim<span>trade</span></span>
+      </a>
+      <div class="sidebar-label">ESPACE PERSONNEL</div>
+      <nav class="main-nav" aria-label="Navigation principale">
+        <button class="nav-item active" data-view="dashboard"><span class="nav-icon">▦</span>Vue d'ensemble</button>
+        <button class="nav-item" data-view="markets"><span class="nav-icon">⌁</span>Marchés</button>
+        <button class="nav-item" data-view="portfolio"><span class="nav-icon">◫</span>Portefeuille</button>
+        <button class="nav-item" data-view="orders"><span class="nav-icon">⇄</span>Ordres <span class="nav-count" id="openOrderCount">0</span></button>
+        <button class="nav-item" data-view="trades"><span class="nav-icon">≋</span>Transactions</button>
+        <button class="nav-item" data-view="watchlist"><span class="nav-icon">☆</span>Favoris</button>
+        <button class="nav-item" data-view="community"><span class="nav-icon">◎</span>Communauté</button>
+        <button class="nav-item" data-view="alerts"><span class="nav-icon">◉</span>Alertes</button>
+        <button class="nav-item hidden" id="adminNavItem" data-view="admin"><span class="nav-icon">♙</span>Admin</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="market-status"><span class="live-dot"></span><span><b id="sideMarketLabel">Flux Yahoo Finance</b><small id="sideMarketTime">En attente de cotations</small></span></div>
+        <button class="nav-item" data-view="settings"><span class="nav-icon">⚙</span>Paramètres</button>
+        <div class="profile-row"><div class="avatar" id="userInitials">SD</div><span><b id="userDisplayName">Compte</b><small id="userEmail">Session locale</small></span><button class="logout-button" id="logoutButton" aria-label="Se déconnecter" title="Se déconnecter">↪</button></div>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button class="mobile-menu icon-button" id="menuButton" aria-label="Ouvrir la navigation">☰</button>
+        <div class="breadcrumb"><span>SIMTRADE</span><span class="crumb-slash">/</span><b id="pageCrumb">Vue d'ensemble</b></div>
+        <div class="topbar-actions">
+          <label class="search-box"><span>⌕</span><input id="globalSearch" type="search" placeholder="Rechercher un actif" autocomplete="off"><kbd>⌘ K</kbd></label>
+          <button class="icon-button notification-button" id="notificationButton" aria-label="Notifications">♧<i></i></button>
+          <span class="demo-pill"><span class="live-dot"></span>ORDRES</span><span class="quote-pill" id="quoteStatus">Connexion au flux…</span>
+        </div>
+      </header>
+      <div class="page-content" id="pageContent"></div>
+      <nav class="mobile-bottom-nav" aria-label="Navigation mobile">
+        <button class="mobile-nav-item active" data-view="dashboard"><span>▦</span>Accueil</button>
+        <button class="mobile-nav-item" data-view="markets"><span>⌁</span>Marchés</button>
+        <button class="mobile-nav-item" data-view="portfolio"><span>◫</span>Portfolio</button>
+        <button class="mobile-nav-item" data-view="community"><span>◎</span>Communauté</button>
+        <button class="mobile-nav-item" data-view="orders"><span>⇄</span>Ordres</button>
+      </nav>
+      <footer class="footer-note"><span>SIMTRADE <span class="footer-sep">·</span> Cotations de marché</span><span>Yahoo Finance · potentiellement différées</span></footer>
+    </main>
+  </div>
+
+  <div class="modal-backdrop hidden" id="modalBackdrop" role="presentation">
+    <section class="trade-modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" id="tradeModal"></section>
+  </div>
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+  <script src="app.js?v=admin-cash-1"></script>
+</body>
+</html>

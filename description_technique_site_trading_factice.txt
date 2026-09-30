@@ -1,0 +1,2437 @@
+CAHIER DES CHARGES TECHNIQUE — SITE DE TRADING FACTICE
+===============================================================
+
+STATUT DU PROJET
+----------------
+Nom de projet : SIMTRADE
+Nature : plateforme de trading entièrement fictive / simulation
+Objectif : reproduire l'expérience utilisateur d'une plateforme de courtage moderne
+sans connecter de fonds réels, sans exécuter d'ordres réels et sans interaction
+avec un marché financier réel.
+
+IMPORTANT :
+- Toutes les données financières sont simulées.
+- Aucun dépôt réel, retrait réel ou transfert bancaire réel.
+- Aucun ordre ne doit être envoyé à une place de marché réelle.
+- Les cours peuvent être générés par un moteur de simulation ou alimentés par des
+  données de démonstration.
+- L'interface doit indiquer clairement qu'il s'agit d'un environnement DEMO.
+- Les soldes affichés sont des crédits virtuels.
+- Le projet sert à la démonstration, au développement et aux tests UX/techniques.
+
+================================================================
+1. VISION GÉNÉRALE
+================================================================
+
+Créer un site web ressemblant à une véritable plateforme de trading avec :
+
+1. Création de compte
+2. Connexion / déconnexion
+3. Vérification de session
+4. Tableau de bord
+5. Portefeuille
+6. Solde disponible
+7. Positions ouvertes
+8. Ordres ouverts
+9. Historique des transactions
+10. Achat d'actifs
+11. Vente d'actifs
+12. Ordres au marché
+13. Ordres limites
+14. Stop-loss simulé
+15. Take-profit simulé
+16. Estimation des frais
+17. Profit/perte latent
+18. Profit/perte réalisé
+19. Graphiques de prix
+20. Recherche d'actifs
+21. Liste de favoris
+22. Notifications
+23. Paramètres utilisateur
+24. Interface d'administration
+25. Journal des événements
+26. Moteur de simulation de marché
+27. Système de génération de prix fictifs
+28. Gestion du risque simulée
+29. API interne
+30. Mode mobile / responsive
+
+================================================================
+2. STACK TECHNIQUE CONSEILLÉE
+================================================================
+
+FRONTEND
+--------
+- React + TypeScript
+- Vite ou Next.js
+- Tailwind CSS
+- TanStack Query
+- Zustand ou Redux Toolkit
+- Recharts / Lightweight Charts pour les graphiques
+- WebSocket pour les mises à jour temps réel
+- Zod pour validation côté client
+
+BACKEND
+-------
+- Node.js + TypeScript
+- NestJS ou Express/Fastify
+- API REST
+- WebSocket
+- Service d'authentification
+- Service portefeuille
+- Service ordres
+- Service marché simulé
+- Service notifications
+
+BASE DE DONNÉES
+---------------
+- PostgreSQL
+- Redis pour cache, sessions temporaires et événements temps réel
+
+INFRASTRUCTURE
+--------------
+- Docker
+- Docker Compose pour développement local
+- Reverse proxy HTTPS en environnement de production
+- Variables d'environnement
+- Logs structurés
+- Monitoring
+
+================================================================
+3. ARCHITECTURE GÉNÉRALE
+================================================================
+
+CLIENT WEB
+    |
+    | HTTPS / WebSocket
+    v
+API BACKEND
+    |
+    +---- Auth Service
+    |
+    +---- User Service
+    |
+    +---- Wallet Service
+    |
+    +---- Order Service
+    |
+    +---- Portfolio Service
+    |
+    +---- Market Simulation Service
+    |
+    +---- Notification Service
+    |
+    +---- Admin Service
+    |
+    v
+PostgreSQL + Redis
+
+Le frontend ne doit jamais modifier directement le solde ou une position.
+Toutes les opérations sensibles passent par le backend.
+
+================================================================
+4. UTILISATEURS
+================================================================
+
+RÔLES
+-----
+USER
+ADMIN
+SUPER_ADMIN (optionnel)
+
+UTILISATEUR
+-----------
+Champs :
+- id
+- email
+- username
+- password_hash
+- first_name
+- last_name
+- avatar_url
+- role
+- status
+- created_at
+- updated_at
+- last_login_at
+- two_factor_enabled
+- demo_account_balance
+
+STATUS :
+- ACTIVE
+- SUSPENDED
+- DELETED
+
+Le mot de passe ne doit jamais être stocké en clair.
+
+================================================================
+5. AUTHENTIFICATION
+================================================================
+
+Fonctions :
+- inscription
+- connexion
+- déconnexion
+- renouvellement de session
+- réinitialisation de mot de passe
+- vérification email simulée
+- 2FA optionnel
+- gestion des sessions
+
+Endpoints indicatifs :
+
+POST /api/auth/register
+POST /api/auth/login
+POST /api/auth/logout
+POST /api/auth/refresh
+POST /api/auth/forgot-password
+POST /api/auth/reset-password
+GET  /api/auth/me
+
+Sécurité :
+- Argon2id ou bcrypt pour les mots de passe
+- cookies HttpOnly pour les refresh tokens
+- CSRF protection si architecture cookie
+- rate limiting
+- validation stricte des entrées
+- journalisation des connexions
+- expiration des sessions
+
+================================================================
+6. COMPTE DE DÉMONSTRATION
+================================================================
+
+À la création du compte, attribuer par exemple :
+
+Solde initial :
+100 000,00 crédits virtuels
+
+Nom de devise :
+USD DEMO
+
+Exemple :
+cash_balance = 100000.00
+
+Le solde virtuel ne représente aucune monnaie réelle.
+
+L'utilisateur peut éventuellement utiliser un bouton :
+"Réinitialiser le compte DEMO"
+
+Cette opération :
+- ferme toutes les positions
+- annule tous les ordres
+- supprime l'historique de simulation si configuré
+- remet le capital virtuel à 100 000
+- crée un événement RESET_DEMO_ACCOUNT
+
+================================================================
+7. ACTIFS
+================================================================
+
+Chaque actif possède :
+
+- id
+- symbol
+- name
+- asset_type
+- currency
+- current_price
+- previous_close
+- day_open
+- day_high
+- day_low
+- volume
+- status
+- tick_size
+- created_at
+- updated_at
+
+TYPES :
+- STOCK
+- ETF
+- CRYPTO_SIM
+- FOREX_SIM
+- INDEX_SIM
+- COMMODITY_SIM
+
+Exemples fictifs :
+- TECHX
+- APLX
+- GLOB
+- NOVA
+- BTCX
+- ETHX
+
+Éviter de présenter des actifs fictifs comme des instruments réellement
+négociables.
+
+================================================================
+8. MOTEUR DE MARCHÉ SIMULÉ
+================================================================
+
+Le moteur de marché est le cœur de la simulation.
+
+Il génère des variations de prix artificielles.
+
+Exemple simplifié :
+
+prix_actuel = prix_précédent * (1 + variation)
+
+variation :
+- petite variation aléatoire
+- tendance éventuelle
+- volatilité configurable
+- événements simulés optionnels
+
+Paramètres :
+- volatility
+- drift
+- spread
+- tick_interval_ms
+- trading_hours
+- market_status
+
+MODES :
+1. RANDOM
+2. TREND
+3. HISTORICAL_REPLAY
+4. MANUAL_ADMIN
+
+Le mode MANUAL_ADMIN permet à l'administrateur de définir un prix de
+démonstration.
+
+IMPORTANT :
+Le moteur doit être isolé de toute API de courtier réelle.
+
+================================================================
+9. CARNET D'ORDRES SIMULÉ
+================================================================
+
+Pour donner une apparence réaliste :
+
+BID
+ASK
+SPREAD
+DEPTH
+
+Exemple :
+
+BID
+99.98
+99.97
+99.96
+
+ASK
+100.02
+100.03
+100.04
+
+Le carnet est entièrement fictif.
+
+Le système peut générer :
+- niveaux bid
+- niveaux ask
+- quantités disponibles
+- spread
+- variation du spread
+
+================================================================
+10. TYPES D'ORDRES
+================================================================
+
+MARKET ORDER
+------------
+Acheter/vendre immédiatement au prix simulé courant.
+
+LIMIT ORDER
+-----------
+Acheter à un prix <= prix limite.
+Vendre à un prix >= prix limite.
+
+STOP LOSS
+---------
+Déclenche une vente simulée lorsque le prix atteint le seuil défini.
+
+TAKE PROFIT
+-----------
+Déclenche une vente simulée lorsque le prix atteint le seuil défini.
+
+STOP LIMIT (optionnel)
+----------------------
+Un stop déclenche ensuite un ordre limite.
+
+ORDRE
+-----
+Champs :
+- id
+- user_id
+- asset_id
+- side
+- type
+- quantity
+- limit_price
+- stop_price
+- take_profit_price
+- status
+- filled_quantity
+- average_fill_price
+- estimated_fee
+- created_at
+- updated_at
+- filled_at
+- cancelled_at
+
+SIDE :
+BUY
+SELL
+
+STATUS :
+PENDING
+OPEN
+PARTIALLY_FILLED
+FILLED
+CANCELLED
+REJECTED
+EXPIRED
+
+================================================================
+11. PROCESSUS D'ACHAT
+================================================================
+
+Exemple :
+
+Utilisateur choisit :
+Asset = TECHX
+Action = ACHETER
+Quantité = 10
+Type = MARKET
+
+Le frontend demande au backend :
+
+POST /api/orders
+
+Le backend :
+
+1. authentifie l'utilisateur
+2. vérifie que l'actif existe
+3. vérifie la quantité
+4. récupère le prix simulé
+5. calcule la valeur
+6. calcule les frais simulés
+7. vérifie le cash disponible
+8. crée l'ordre
+9. transmet l'ordre au moteur de simulation
+10. reçoit le résultat d'exécution
+11. met à jour le portefeuille
+12. met à jour le cash
+13. enregistre le trade
+14. publie un événement WebSocket
+15. retourne le résultat au frontend
+
+================================================================
+12. PROCESSUS DE VENTE
+================================================================
+
+Avant une vente :
+
+1. Vérifier la position
+2. Vérifier la quantité disponible
+3. Calculer la valeur
+4. Calculer les frais
+5. Créer l'ordre
+6. Simuler l'exécution
+7. Diminuer la quantité détenue
+8. Ajouter le produit de la vente au cash
+9. Calculer le P&L réalisé
+10. Enregistrer le trade
+
+Une vente ne doit jamais permettre à l'utilisateur de vendre plus
+d'unités qu'il n'en possède, sauf si le mode "short simulé" est
+explicitement activé.
+
+================================================================
+13. FRAIS SIMULÉS
+================================================================
+
+Le système doit avoir une configuration centralisée.
+
+Exemple :
+
+commission_percent = 0.10 %
+
+ou
+
+commission_fixed = 1.00 DEMO
+
+Exemple :
+
+quantité = 10
+prix = 100
+valeur = 1000
+
+commission = 1.00
+
+total achat = 1001.00
+
+Ces frais sont purement fictifs.
+
+La règle de calcul doit être côté backend et non uniquement côté frontend.
+
+================================================================
+14. PORTEFEUILLE
+================================================================
+
+Une position contient :
+
+- id
+- user_id
+- asset_id
+- quantity
+- average_entry_price
+- current_price
+- market_value
+- unrealized_pnl
+- unrealized_pnl_percent
+- realized_pnl
+- total_fees
+
+Formules :
+
+market_value =
+quantity * current_price
+
+unrealized_pnl =
+(quantity * current_price)
+-
+(quantity * average_entry_price)
+
+unrealized_pnl_percent =
+unrealized_pnl /
+(quantity * average_entry_price)
+* 100
+
+Le backend est la source de vérité.
+
+================================================================
+15. CASH / PORTE-MONNAIE VIRTUEL
+================================================================
+
+Le portefeuille comporte :
+
+cash_available
+cash_reserved
+total_equity
+
+Exemple :
+
+cash_available = 82 000
+cash_reserved = 3 000
+positions_value = 15 000
+
+total_equity = 100 000
+
+Lorsqu'un ordre limite est placé, le montant nécessaire peut être
+réservé.
+
+À l'annulation :
+- libérer le cash réservé
+
+À l'exécution :
+- transformer la réservation en transaction réelle dans la simulation.
+
+================================================================
+16. GRAND LIVRE / LEDGER
+================================================================
+
+Pour rendre le système robuste, toutes les variations financières
+virtuelles doivent être enregistrées.
+
+Table ledger_entries :
+
+- id
+- user_id
+- type
+- amount
+- currency
+- reference_type
+- reference_id
+- balance_before
+- balance_after
+- created_at
+
+TYPES :
+DEMO_INITIAL_BALANCE
+BUY
+SELL
+FEE
+REFUND
+RESET
+ADJUSTMENT
+
+Le ledger permet de reconstruire l'historique du compte.
+
+================================================================
+17. TRANSACTIONS
+================================================================
+
+Table trades :
+
+- id
+- order_id
+- user_id
+- asset_id
+- side
+- quantity
+- execution_price
+- gross_value
+- fee
+- net_value
+- executed_at
+
+Chaque ordre FILLED peut produire un ou plusieurs trades.
+
+Cela permet de simuler :
+- remplissage partiel
+- plusieurs exécutions
+- prix moyen d'exécution
+
+================================================================
+18. HISTORIQUE
+================================================================
+
+Pages :
+
+/dashboard
+/portfolio
+/orders
+/trades
+/activity
+
+Filtres :
+- date
+- actif
+- BUY
+- SELL
+- type d'ordre
+- statut
+
+Exemple d'affichage :
+
+30/09/2026 20:15
+BUY
+TECHX
+10 unités
+100.25
+1002.50 DEMO
+Frais : 1.00 DEMO
+FILLED
+
+================================================================
+19. DASHBOARD
+================================================================
+
+Le dashboard affiche :
+
+CAPITAL TOTAL
+100 000.00 DEMO
+
+CASH DISPONIBLE
+82 000.00 DEMO
+
+VALEUR DES POSITIONS
+18 000.00 DEMO
+
+P&L DU JOUR
++245.20 DEMO
+
+P&L TOTAL
++1 250.20 DEMO
+
+ORDRES OUVERTS
+3
+
+POSITIONS
+5
+
+Composants :
+- graphique portefeuille
+- graphique actif principal
+- positions
+- ordres récents
+- transactions récentes
+- favoris
+- alertes
+
+================================================================
+20. PAGE ACTIF
+================================================================
+
+URL :
+/markets/:symbol
+
+Contenu :
+
+- nom
+- symbole
+- prix
+- variation
+- variation %
+- graphique
+- volume simulé
+- high
+- low
+- open
+- previous close
+- bid
+- ask
+- spread
+
+Boutons :
+ACHETER
+VENDRE
+
+Formulaire :
+- quantité
+- type
+- prix limite
+- stop
+- take profit
+
+Afficher une confirmation avant validation.
+
+================================================================
+21. GRAPHIQUES
+================================================================
+
+Types :
+- ligne
+- chandeliers
+- aire
+
+Périodes :
+1m
+5m
+15m
+1h
+4h
+1D
+1W
+1M
+1Y
+
+Les données peuvent être générées par le moteur de simulation.
+
+Bougies :
+timestamp
+open
+high
+low
+close
+volume
+
+WebSocket :
+WS /api/market-stream
+
+Événements :
+
+PRICE_UPDATE
+CANDLE_UPDATE
+ORDER_UPDATE
+PORTFOLIO_UPDATE
+NOTIFICATION
+
+================================================================
+22. WEBSOCKET
+================================================================
+
+Après connexion :
+
+client -> subscribe(asset)
+
+serveur -> PRICE_UPDATE
+
+Exemple logique :
+
+{
+  "event": "PRICE_UPDATE",
+  "data": {
+    "symbol": "TECHX",
+    "price": 101.23,
+    "change": 1.23,
+    "changePercent": 1.23,
+    "timestamp": "..."
+  }
+}
+
+Le frontend met à jour l'écran sans rechargement.
+
+================================================================
+23. ALERTES
+================================================================
+
+L'utilisateur peut créer :
+
+PRICE_ABOVE
+PRICE_BELOW
+PERCENT_CHANGE
+
+Exemple :
+
+TECHX
+ALERTE SI > 120.00
+
+Table alerts :
+- id
+- user_id
+- asset_id
+- type
+- threshold
+- active
+- triggered_at
+- created_at
+
+Notifications :
+- notification in-app
+- notification email fictive/optionnelle
+
+================================================================
+24. FAVORIS
+================================================================
+
+L'utilisateur peut ajouter des actifs à une watchlist.
+
+Exemple :
+
+MA WATCHLIST
+
+TECHX
+101.23
++1.23%
+
+GLOB
+55.42
+-0.45%
+
+NOVA
+210.10
++2.15%
+
+================================================================
+25. RECHERCHE
+================================================================
+
+Champ :
+"Rechercher un actif"
+
+Recherche par :
+- symbol
+- name
+
+Exemple :
+
+"tech"
+
+Résultats :
+
+TECHX — TechX Corporation
+TECHN — TechNova Simulation
+TECHM — TechMarket Demo
+
+================================================================
+26. INTERFACE
+================================================================
+
+STYLE
+-----
+Interface proche d'une plateforme de trading professionnelle mais avec
+une identité visuelle propre.
+
+STRUCTURE DESKTOP :
+
+-------------------------------------------------------
+| LOGO | Recherche | Marchés | Portefeuille | Profil |
+-------------------------------------------------------
+|       |                                      |
+| NAV   |          CONTENU PRINCIPAL           |
+|       |                                      |
+|       |                                      |
+-------------------------------------------------------
+
+NAVIGATION :
+
+Dashboard
+Marchés
+Portefeuille
+Ordres
+Transactions
+Watchlist
+Alertes
+Paramètres
+
+ADMIN :
+
+Vue globale
+Utilisateurs
+Actifs
+Moteur de marché
+Ordres
+Logs
+Configuration
+
+================================================================
+27. RESPONSIVE DESIGN
+================================================================
+
+Desktop :
+- sidebar
+- graphiques larges
+- tableau positions
+
+Tablet :
+- sidebar réduite
+- tableaux scrollables
+
+Mobile :
+- bottom navigation
+- graphiques adaptés
+- bouton acheter/vendre accessible
+- formulaires en pleine largeur
+
+================================================================
+28. CONFIRMATION D'ORDRE
+================================================================
+
+Avant exécution :
+
+CONFIRMER L'ORDRE
+
+Action : ACHETER
+Actif : TECHX
+Quantité : 10
+Prix estimé : 101.25 DEMO
+Valeur : 1 012.50 DEMO
+Frais estimés : 1.00 DEMO
+Total estimé : 1 013.50 DEMO
+
+[ANNULER] [CONFIRMER]
+
+Pour une simulation réaliste, afficher :
+"Prix estimé — le prix d'exécution simulé peut varier."
+
+================================================================
+29. ORDRES LIMITES
+================================================================
+
+Exemple :
+
+BUY
+TECHX
+Quantité : 10
+Prix limite : 95.00
+
+Si prix courant > 95 :
+ordre OPEN
+
+Lorsque prix <= 95 :
+ordre FILLED
+
+Le moteur doit vérifier les ordres ouverts à chaque évolution de prix.
+
+================================================================
+30. STOP LOSS
+================================================================
+
+Exemple :
+
+Position :
+10 TECHX
+Prix moyen : 100
+
+Stop loss :
+90
+
+Si prix <= 90 :
+
+1. déclenchement
+2. création de l'exécution simulée
+3. vente
+4. calcul du P&L
+5. fermeture de la position
+6. notification
+
+================================================================
+31. TAKE PROFIT
+================================================================
+
+Exemple :
+
+Position :
+10 TECHX
+Prix moyen : 100
+
+Take profit :
+120
+
+Si prix >= 120 :
+vente simulée.
+
+================================================================
+32. GESTION DES ERREURS
+================================================================
+
+Messages :
+
+INSUFFICIENT_FUNDS
+INSUFFICIENT_POSITION
+INVALID_QUANTITY
+INVALID_PRICE
+MARKET_CLOSED
+ORDER_NOT_FOUND
+ORDER_ALREADY_FILLED
+ORDER_ALREADY_CANCELLED
+ASSET_NOT_FOUND
+RATE_LIMITED
+UNAUTHORIZED
+FORBIDDEN
+INTERNAL_ERROR
+
+Les erreurs doivent être lisibles par l'utilisateur.
+
+================================================================
+33. API REST
+================================================================
+
+AUTH
+----
+POST /api/auth/register
+POST /api/auth/login
+POST /api/auth/logout
+GET /api/auth/me
+
+USERS
+-----
+GET /api/users/me
+PATCH /api/users/me
+
+ASSETS
+------
+GET /api/assets
+GET /api/assets/:symbol
+GET /api/assets/:symbol/candles
+GET /api/assets/:symbol/quote
+
+PORTFOLIO
+---------
+GET /api/portfolio
+GET /api/portfolio/positions
+GET /api/portfolio/performance
+
+ORDERS
+------
+POST /api/orders
+GET /api/orders
+GET /api/orders/:id
+POST /api/orders/:id/cancel
+
+TRADES
+------
+GET /api/trades
+GET /api/trades/:id
+
+WATCHLIST
+---------
+GET /api/watchlist
+POST /api/watchlist
+DELETE /api/watchlist/:assetId
+
+ALERTS
+------
+GET /api/alerts
+POST /api/alerts
+PATCH /api/alerts/:id
+DELETE /api/alerts/:id
+
+DEMO
+----
+POST /api/demo/reset
+
+================================================================
+34. EXEMPLE DE POST /api/orders
+================================================================
+
+REQUEST :
+
+{
+  "asset": "TECHX",
+  "side": "BUY",
+  "type": "MARKET",
+  "quantity": 10
+}
+
+RESPONSE :
+
+{
+  "orderId": "ord_demo_123",
+  "status": "FILLED",
+  "symbol": "TECHX",
+  "side": "BUY",
+  "quantity": 10,
+  "averageFillPrice": 101.25,
+  "grossValue": 1012.50,
+  "fee": 1.00,
+  "total": 1013.50,
+  "currency": "USD_DEMO"
+}
+
+================================================================
+35. BASE DE DONNÉES
+================================================================
+
+TABLE users
+-----------
+id
+email
+username
+password_hash
+role
+status
+created_at
+updated_at
+
+TABLE assets
+------------
+id
+symbol
+name
+asset_type
+currency
+current_price
+previous_close
+status
+created_at
+
+TABLE wallets
+-------------
+id
+user_id
+currency
+cash_available
+cash_reserved
+created_at
+updated_at
+
+TABLE positions
+---------------
+id
+user_id
+asset_id
+quantity
+average_entry_price
+realized_pnl
+created_at
+updated_at
+
+TABLE orders
+------------
+id
+user_id
+asset_id
+side
+type
+quantity
+filled_quantity
+limit_price
+stop_price
+average_fill_price
+status
+fee
+created_at
+updated_at
+
+TABLE trades
+------------
+id
+order_id
+user_id
+asset_id
+side
+quantity
+execution_price
+gross_value
+fee
+net_value
+executed_at
+
+TABLE ledger_entries
+--------------------
+id
+user_id
+wallet_id
+type
+amount
+balance_before
+balance_after
+reference_type
+reference_id
+created_at
+
+TABLE price_ticks
+-----------------
+id
+asset_id
+price
+volume
+timestamp
+
+TABLE candles
+-------------
+id
+asset_id
+timeframe
+timestamp
+open
+high
+low
+close
+volume
+
+TABLE watchlists
+----------------
+id
+user_id
+name
+created_at
+
+TABLE watchlist_items
+---------------------
+id
+watchlist_id
+asset_id
+
+TABLE alerts
+------------
+id
+user_id
+asset_id
+type
+threshold
+active
+triggered_at
+created_at
+
+TABLE notifications
+-------------------
+id
+user_id
+type
+title
+message
+read
+created_at
+
+TABLE audit_logs
+----------------
+id
+user_id
+action
+entity_type
+entity_id
+metadata
+ip_hash
+created_at
+
+================================================================
+36. TRANSACTIONS SQL
+================================================================
+
+Toute opération financière virtuelle doit être atomique.
+
+Exemple achat :
+
+BEGIN
+
+1. SELECT wallet FOR UPDATE
+2. vérifier cash
+3. INSERT order
+4. exécuter simulation
+5. UPDATE wallet
+6. UPDATE position
+7. INSERT trade
+8. INSERT ledger_entry
+9. INSERT audit_log
+
+COMMIT
+
+En cas d'erreur :
+
+ROLLBACK
+
+Objectif :
+éviter qu'une position soit créditée sans débiter le portefeuille.
+
+================================================================
+37. IDEMPOTENCE
+================================================================
+
+Chaque création d'ordre peut recevoir un :
+
+Idempotency-Key
+
+Exemple :
+
+Idempotency-Key:
+demo-user-123-order-abc
+
+Si la requête est répétée accidentellement,
+le backend ne doit pas créer deux ordres.
+
+================================================================
+38. SÉCURITÉ
+================================================================
+
+Même pour une simulation :
+
+- HTTPS en production
+- validation des entrées
+- ORM avec requêtes paramétrées
+- protection XSS
+- protection CSRF selon architecture
+- rate limiting
+- contrôle d'accès RBAC
+- secrets dans variables d'environnement
+- aucun secret dans Git
+- logs sans données sensibles
+- mots de passe hashés
+- sessions expirables
+- headers de sécurité
+
+Ne jamais faire confiance aux valeurs envoyées par le frontend.
+
+Exemple dangereux :
+
+POST /order
+{
+  "cashAvailable": 100000000
+}
+
+Le backend doit ignorer toute tentative de modification du solde par le client.
+
+================================================================
+39. AUDIT LOG
+================================================================
+
+Actions à journaliser :
+
+LOGIN
+LOGOUT
+REGISTER
+CREATE_ORDER
+CANCEL_ORDER
+EXECUTE_ORDER
+CREATE_ALERT
+DELETE_ALERT
+RESET_DEMO
+ADMIN_UPDATE_ASSET
+ADMIN_UPDATE_PRICE
+ADMIN_SUSPEND_USER
+
+Exemple :
+
+{
+  "action": "CREATE_ORDER",
+  "entity": "order",
+  "entityId": "ord_123",
+  "metadata": {
+    "symbol": "TECHX",
+    "side": "BUY",
+    "quantity": 10
+  }
+}
+
+================================================================
+40. ADMINISTRATION
+================================================================
+
+Dashboard admin :
+
+UTILISATEURS
+ACTIFS
+ORDRES
+TRADES
+ERREURS
+VOLUME SIMULÉ
+VALEUR TOTALE DES COMPTES DEMO
+
+Fonctions :
+
+- créer un actif
+- désactiver un actif
+- modifier le prix simulé
+- changer la volatilité
+- activer/désactiver le marché
+- consulter les ordres
+- consulter les logs
+- réinitialiser un compte DEMO
+- suspendre un compte
+
+Les actions admin sensibles doivent être journalisées.
+
+================================================================
+41. MOTEUR DE SIMULATION — LOGIQUE
+================================================================
+
+Boucle :
+
+TICK toutes les X millisecondes
+
+Pour chaque actif :
+
+1. récupérer prix
+2. calculer variation
+3. calculer nouveau prix
+4. générer bid/ask
+5. mettre à jour prix
+6. enregistrer tick si nécessaire
+7. vérifier les ordres limites
+8. vérifier stop-loss
+9. vérifier take-profit
+10. exécuter les ordres déclenchés
+11. publier PRICE_UPDATE
+
+Pseudo-code :
+
+while marketRunning:
+
+    for asset in assets:
+
+        oldPrice = asset.price
+
+        movement = randomMovement(
+            volatility=asset.volatility
+        )
+
+        newPrice = oldPrice * (1 + movement)
+
+        updateAssetPrice(asset, newPrice)
+
+        processOpenOrders(asset)
+
+        processStopLoss(asset)
+
+        processTakeProfit(asset)
+
+        publishPriceUpdate(asset)
+
+================================================================
+42. SLIPPAGE SIMULÉ
+================================================================
+
+Pour rapprocher la simulation d'un environnement de marché :
+
+MARKET BUY :
+
+execution_price =
+ask_price + slippage
+
+MARKET SELL :
+
+execution_price =
+bid_price - slippage
+
+Le slippage doit rester fictif et configurable.
+
+Paramètres :
+
+min_slippage
+max_slippage
+
+================================================================
+43. SPREAD
+================================================================
+
+Exemple :
+
+mid_price = 100
+
+spread = 0.04
+
+bid = 99.98
+ask = 100.02
+
+BUY MARKET :
+100.02
+
+SELL MARKET :
+99.98
+
+Cette distinction rend le comportement plus réaliste.
+
+================================================================
+44. FRACTIONNEMENT DES ORDRES
+================================================================
+
+Optionnel mais recommandé.
+
+Un ordre de 100 unités peut être exécuté :
+
+40 unités à 100.10
+30 unités à 100.12
+30 unités à 100.15
+
+Average fill :
+
+(40*100.10 + 30*100.12 + 30*100.15) / 100
+
+Le système crée trois trades liés au même order_id.
+
+================================================================
+45. P&L
+================================================================
+
+P&L latent :
+
+current_value - cost_basis
+
+P&L réalisé :
+
+prix_vente - prix_achat
+multiplié par quantité
+moins frais
+
+Pour une position :
+
+cost_basis =
+quantity * average_entry_price
+
+market_value =
+quantity * current_price
+
+unrealized_pnl =
+market_value - cost_basis
+
+================================================================
+46. PERFORMANCE
+================================================================
+
+Afficher :
+
+P&L jour
+P&L semaine
+P&L mois
+P&L total
+
+Graphique :
+
+timestamp
+portfolio_value
+
+Exemple :
+
+20:00 -> 100000
+20:05 -> 100120
+20:10 -> 99880
+20:15 -> 100250
+
+================================================================
+47. NOTIFICATIONS
+================================================================
+
+Exemples :
+
+"Votre ordre TECHX a été exécuté."
+
+"Votre ordre limite TECHX a été déclenché."
+
+"Votre alerte de prix a été atteinte."
+
+"Votre position TECHX a atteint votre take-profit."
+
+Toujours préciser :
+"Simulation DEMO"
+
+================================================================
+48. DESIGN UX
+================================================================
+
+COULEURS INDICATIVES :
+- fond sombre
+- cartes contrastées
+- vert pour variation positive
+- rouge pour variation négative
+- jaune pour avertissement
+- gris pour informations neutres
+
+Ne pas utiliser uniquement la couleur :
+ajouter + / - et des icônes ou libellés.
+
+Boutons :
+
+ACHETER
+VENDRE
+ANNULER
+CONFIRMER
+MODIFIER
+FERMER
+
+Les actions destructives ou financières simulées doivent demander confirmation.
+
+================================================================
+49. ÉTIQUETAGE DEMO
+================================================================
+
+Le site doit afficher clairement dans le header :
+
+MODE DÉMONSTRATION — ARGENT VIRTUEL
+
+Et éventuellement :
+
+"Cette plateforme est une simulation. Aucun ordre ou paiement réel
+n'est exécuté."
+
+Cette mention doit rester visible dans les écrans de trading.
+
+================================================================
+50. TESTS
+================================================================
+
+TESTS UNITAIRES :
+
+- calcul frais
+- calcul P&L
+- calcul valeur portefeuille
+- validation quantité
+- validation prix
+- déclenchement stop
+- déclenchement take profit
+- exécution limit
+- réservation cash
+- libération cash
+
+TESTS D'INTÉGRATION :
+
+- inscription
+- connexion
+- création ordre
+- exécution ordre
+- annulation
+- vente
+- historique
+- reset compte
+
+TESTS DE CONCURRENCE :
+
+Deux requêtes d'achat simultanées ne doivent pas pouvoir dépenser
+deux fois le même solde.
+
+TESTS E2E :
+
+- créer compte
+- consulter dashboard
+- acheter
+- voir position
+- vendre
+- vérifier P&L
+- consulter historique
+- réinitialiser DEMO
+
+================================================================
+51. SCÉNARIOS DE TEST
+================================================================
+
+SCÉNARIO A — ACHAT MARKET
+
+Solde :
+100 000
+
+TECHX :
+100
+
+Achat :
+10
+
+Frais :
+1
+
+Solde attendu :
+98 999
+
+Position :
+10 TECHX
+
+Valeur :
+environ 1 000
+
+================================================================
+
+SCÉNARIO B — VENTE
+
+Position :
+10 TECHX
+
+Prix d'achat :
+100
+
+Prix de vente :
+110
+
+Frais achat :
+1
+Frais vente :
+1
+
+P&L approximatif :
+98 DEMO
+
+================================================================
+
+SCÉNARIO C — ORDRE LIMITE
+
+Prix :
+100
+
+Ordre :
+BUY 10 @ 95
+
+Le prix monte à 102 :
+ordre OPEN
+
+Le prix descend à 95 :
+ordre FILLED
+
+================================================================
+
+SCÉNARIO D — INSUFFISANCE DE SOLDE
+
+Solde :
+500
+
+Achat :
+10 000
+
+Résultat :
+REJECTED
+
+Motif :
+INSUFFICIENT_FUNDS
+
+================================================================
+
+SCÉNARIO E — VENTE EXCESSIVE
+
+Position :
+10
+
+Vente :
+20
+
+Résultat :
+REJECTED
+
+Motif :
+INSUFFICIENT_POSITION
+
+================================================================
+52. VARIABLES D'ENVIRONNEMENT
+================================================================
+
+NODE_ENV=development
+
+DATABASE_URL=postgresql://...
+REDIS_URL=redis://...
+
+JWT_SECRET=...
+SESSION_SECRET=...
+
+DEMO_INITIAL_BALANCE=100000
+DEMO_CURRENCY=USD_DEMO
+
+MARKET_TICK_INTERVAL_MS=1000
+DEFAULT_VOLATILITY=0.001
+
+NE JAMAIS COMMITTER LES SECRETS.
+
+================================================================
+53. STRUCTURE DU PROJET
+================================================================
+
+/simtrade
+|
++-- /apps
+|   +-- /web
+|   |   +-- src
+|   |   +-- public
+|   |
+|   +-- /api
+|       +-- src
+|
++-- /packages
+|   +-- /shared
+|   +-- /types
+|
++-- /database
+|   +-- migrations
+|   +-- seeds
+|
++-- /docker
+|
++-- docker-compose.yml
++-- package.json
++-- README.md
++-- .env.example
++-- .gitignore
+
+================================================================
+54. FRONTEND — COMPOSANTS
+================================================================
+
+AppShell
+Header
+Sidebar
+BottomNavigation
+SearchBar
+AssetCard
+PriceChart
+OrderBook
+OrderForm
+OrderConfirmation
+PositionTable
+OrdersTable
+TradesTable
+PortfolioSummary
+PnLCard
+BalanceCard
+Watchlist
+AlertList
+NotificationCenter
+UserMenu
+SettingsPanel
+AdminPanel
+DemoBanner
+
+================================================================
+55. PAGES
+================================================================
+
+/
+Landing page
+
+/login
+Connexion
+
+/register
+Inscription
+
+/dashboard
+Tableau de bord
+
+/markets
+Marchés
+
+/markets/:symbol
+Détail actif
+
+/portfolio
+Portefeuille
+
+/orders
+Ordres
+
+/trades
+Transactions
+
+/watchlist
+Favoris
+
+/alerts
+Alertes
+
+/settings
+Paramètres
+
+/admin
+Administration
+
+================================================================
+56. ÉTAT FRONTEND
+================================================================
+
+État global :
+
+user
+session
+wallet
+positions
+orders
+watchlist
+notifications
+marketQuotes
+
+Les prix temps réel arrivent par WebSocket.
+
+TanStack Query :
+- données serveur
+- cache
+- invalidation
+
+Zustand :
+- préférences UI
+- actif sélectionné
+- état temporaire des formulaires
+
+================================================================
+57. VALIDATION ORDER FORM
+================================================================
+
+BUY/SELL
+
+asset :
+required
+
+quantity :
+required
+> 0
+
+type :
+required
+
+MARKET :
+pas de limit_price
+
+LIMIT :
+limit_price > 0
+
+STOP :
+stop_price > 0
+
+TAKE PROFIT :
+take_profit_price > 0
+
+Les mêmes validations doivent être reproduites côté backend.
+
+================================================================
+58. RÉSILIENCE
+================================================================
+
+Si WebSocket tombe :
+
+- reconnect automatique
+- backoff progressif
+- affichage "Reconnexion..."
+- récupération des données REST après reconnexion
+
+Si API indisponible :
+
+- message clair
+- ne pas prétendre que l'ordre a été exécuté
+
+Important :
+l'interface ne doit jamais afficher FILLED avant confirmation du backend.
+
+================================================================
+59. OBSERVABILITÉ
+================================================================
+
+Logs :
+
+INFO
+WARN
+ERROR
+
+Chaque requête backend peut avoir un request_id.
+
+Exemple :
+
+request_id = req_8f2a...
+
+Les logs doivent permettre de suivre :
+
+request
+order
+trade
+ledger
+
+sans stocker de secrets.
+
+================================================================
+60. PERFORMANCE
+================================================================
+
+Objectifs indicatifs :
+
+API :
+< 300 ms sur environnement local normal
+
+WebSocket :
+mise à jour fluide
+
+Frontend :
+lazy loading
+pagination
+virtualisation des grandes tables
+
+Historique :
+pagination serveur
+
+Ne pas charger 100 000 transactions d'un coup.
+
+================================================================
+61. PAGINATION
+================================================================
+
+GET /api/orders?page=1&limit=50
+
+Réponse :
+
+{
+  "items": [],
+  "page": 1,
+  "limit": 50,
+  "total": 240
+}
+
+Même logique pour :
+- trades
+- notifications
+- audit logs
+
+================================================================
+62. EXPORT
+================================================================
+
+Optionnel :
+
+Exporter l'historique DEMO en CSV.
+
+Exemple colonnes :
+
+Date
+Symbol
+Side
+Type
+Quantity
+Price
+Fees
+Total
+Status
+
+Le fichier doit porter une mention :
+SIMULATION / DEMO.
+
+================================================================
+63. ACCESSIBILITÉ
+================================================================
+
+Prévoir :
+
+- navigation clavier
+- labels de formulaires
+- contrastes suffisants
+- aria-labels
+- focus visible
+- messages d'erreur accessibles
+- ne pas dépendre uniquement des couleurs
+
+================================================================
+64. INTERNATIONALISATION
+================================================================
+
+Langues possibles :
+
+FR
+EN
+
+Tous les textes doivent être externalisés.
+
+Exemple :
+
+order.buy = "Acheter"
+order.sell = "Vendre"
+
+currency formatting selon locale.
+
+================================================================
+65. DONNÉES DE SEED
+================================================================
+
+Créer automatiquement :
+
+10 actifs fictifs
+5 utilisateurs DEMO
+historique de prix
+quelques ordres
+quelques trades
+watchlists
+alertes
+
+Utilisateur :
+
+demo@example.test
+
+Ne jamais utiliser de véritables coordonnées personnelles.
+
+================================================================
+66. COMPTE ADMIN DE DÉVELOPPEMENT
+================================================================
+
+Créer un compte uniquement dans les environnements de développement.
+
+Exemple :
+
+admin@example.test
+
+Mot de passe défini via variable d'environnement.
+
+Ne jamais livrer un mot de passe admin fixe dans le dépôt.
+
+================================================================
+67. RÈGLES MÉTIER PRINCIPALES
+================================================================
+
+RÈGLE 1
+Un utilisateur ne peut dépenser plus que son cash disponible.
+
+RÈGLE 2
+Une vente ne peut dépasser la position disponible sauf mode short
+explicitement activé.
+
+RÈGLE 3
+Les frais sont calculés côté serveur.
+
+RÈGLE 4
+Le frontend ne peut jamais définir directement un nouveau solde.
+
+RÈGLE 5
+Un ordre FILLED ne peut pas redevenir OPEN.
+
+RÈGLE 6
+Un ordre CANCELLED ne peut pas être exécuté.
+
+RÈGLE 7
+Chaque exécution crée une trace dans trades.
+
+RÈGLE 8
+Chaque variation financière crée une trace ledger.
+
+RÈGLE 9
+Les actions importantes sont auditées.
+
+RÈGLE 10
+Aucune connexion à un courtier ou système financier réel.
+
+================================================================
+68. MACHINE À ÉTATS D'UN ORDRE
+================================================================
+
+CREATED
+  |
+  v
+OPEN
+  |
+  +----> CANCELLED
+  |
+  +----> PARTIALLY_FILLED
+              |
+              v
+           FILLED
+
+Possibilité :
+OPEN -> EXPIRED
+
+Interdire :
+
+FILLED -> OPEN
+CANCELLED -> FILLED
+EXPIRED -> FILLED
+
+================================================================
+69. MACHINE À ÉTATS DU COMPTE
+================================================================
+
+ACTIVE
+ |
+ +--> SUSPENDED
+ |
+ +--> DELETED
+
+Un compte SUSPENDED :
+- ne peut pas créer de nouvel ordre
+- peut éventuellement consulter ses données
+
+================================================================
+70. SIMULATION DE VOLATILITÉ
+================================================================
+
+Configuration par actif :
+
+volatility = 0.002
+
+Cela signifie que le moteur peut produire des mouvements fictifs
+autour du prix actuel.
+
+Ajouter éventuellement :
+
+news_event_probability
+trend_strength
+mean_reversion
+volume_multiplier
+
+Ces paramètres restent purement artificiels.
+
+================================================================
+71. ÉVÉNEMENTS SIMULÉS
+================================================================
+
+Pour rendre la plateforme vivante :
+
+"TECHX publie des résultats meilleurs que prévu."
+
+Effet simulé :
++2.5 %
+
+ou
+
+"Événement de marché DEMO."
+
+Effet simulé :
+-3 %
+
+Ces événements doivent être explicitement présentés comme des événements
+de simulation.
+
+================================================================
+72. MODE DÉMONSTRATION AVANCÉ
+================================================================
+
+Admin peut lancer :
+
+SCENARIO_BULL
+SCENARIO_BEAR
+SCENARIO_SIDEWAYS
+SCENARIO_VOLATILE
+SCENARIO_CRASH_DEMO
+
+Exemple :
+
+SCENARIO_BULL
+durée : 5 minutes
+tendance moyenne : +0.2 % / minute
+
+Les scénarios sont purement fictifs.
+
+================================================================
+73. RESET
+================================================================
+
+POST /api/demo/reset
+
+Effets :
+
+- annulation ordres
+- suppression ou archivage positions
+- restauration balance
+- réinitialisation performance
+- journalisation RESET_DEMO
+
+Retour :
+
+{
+  "success": true,
+  "balance": 100000,
+  "currency": "USD_DEMO"
+}
+
+================================================================
+74. SEED DE PRIX
+================================================================
+
+Exemple :
+
+TECHX
+
+10:00 100.00
+10:01 100.20
+10:02 99.80
+10:03 100.40
+10:04 101.10
+
+Le graphique peut reconstruire les bougies.
+
+================================================================
+75. DOCUMENTATION API
+================================================================
+
+Utiliser OpenAPI / Swagger.
+
+Documenter :
+
+- authentication
+- users
+- assets
+- portfolio
+- orders
+- trades
+- alerts
+- watchlists
+- demo
+- admin
+
+Chaque endpoint doit documenter :
+- paramètres
+- body
+- réponse
+- erreurs
+- authentification nécessaire
+
+================================================================
+76. EXEMPLE DE FLUX COMPLET
+================================================================
+
+Utilisateur ouvre dashboard.
+
+1. GET /api/auth/me
+2. GET /api/portfolio
+3. GET /api/orders?status=OPEN
+4. GET /api/assets?favorites=true
+5. ouverture WebSocket
+6. abonnement aux actifs
+
+Utilisateur ouvre TECHX.
+
+7. GET /api/assets/TECHX
+8. GET /api/assets/TECHX/candles
+9. WebSocket subscribe TECHX
+
+Utilisateur clique ACHETER.
+
+10. formulaire
+11. estimation
+12. confirmation
+13. POST /api/orders
+14. backend valide
+15. moteur exécute
+16. trade créé
+17. ledger créé
+18. portefeuille mis à jour
+19. WebSocket ORDER_UPDATE
+20. WebSocket PORTFOLIO_UPDATE
+21. UI actualisée
+
+================================================================
+77. RÉSULTAT ATTENDU
+================================================================
+
+Le produit final doit donner l'impression d'une véritable interface
+de trading moderne tout en restant un environnement fermé et fictif.
+
+L'utilisateur doit pouvoir :
+
+- créer un compte DEMO
+- recevoir un capital virtuel
+- consulter des actifs fictifs
+- regarder des graphiques
+- acheter
+- vendre
+- placer des ordres limites
+- utiliser stop-loss
+- utiliser take-profit
+- voir ses positions
+- voir ses gains/pertes
+- consulter ses transactions
+- annuler ses ordres
+- recevoir des notifications
+- gérer ses favoris
+- réinitialiser son compte
+
+Aucune opération ne doit avoir d'effet financier réel.
+
+================================================================
+78. CHECKLIST DE LIVRAISON
+================================================================
+
+[ ] Frontend fonctionnel
+[ ] Backend fonctionnel
+[ ] PostgreSQL
+[ ] Redis
+[ ] Authentification
+[ ] Sessions
+[ ] Dashboard
+[ ] Portefeuille
+[ ] Wallet virtuel
+[ ] Ledger
+[ ] Actifs fictifs
+[ ] Prix simulés
+[ ] WebSocket
+[ ] Market orders
+[ ] Limit orders
+[ ] Stop loss
+[ ] Take profit
+[ ] Annulation
+[ ] Historique
+[ ] P&L
+[ ] Frais simulés
+[ ] Slippage simulé
+[ ] Spread simulé
+[ ] Watchlist
+[ ] Alertes
+[ ] Notifications
+[ ] Administration
+[ ] Audit logs
+[ ] Tests unitaires
+[ ] Tests intégration
+[ ] Tests E2E
+[ ] Responsive
+[ ] Accessibilité
+[ ] Documentation API
+[ ] Docker
+[ ] .env.example
+[ ] README
+[ ] Bannière DEMO visible
+[ ] Aucune connexion financière réelle
+
+================================================================
+79. CRITÈRE FINAL
+================================================================
+
+Le système est considéré comme terminé lorsque le parcours suivant
+fonctionne intégralement :
+
+INSCRIPTION
+    ->
+COMPTE DEMO
+    ->
+100 000 USD DEMO
+    ->
+MARCHÉ
+    ->
+CHOIX ACTIF
+    ->
+ACHAT
+    ->
+CONFIRMATION
+    ->
+EXÉCUTION SIMULÉE
+    ->
+POSITION
+    ->
+VARIATION DU PRIX
+    ->
+P&L LATENT
+    ->
+VENTE
+    ->
+P&L RÉALISÉ
+    ->
+HISTORIQUE
+    ->
+LEDGER
+    ->
+AUDIT
+
+Le système doit être cohérent à chaque étape et ne jamais dépendre
+d'un marché ou d'un système financier réel.
+
+FIN DU CAHIER DES CHARGES
+=========================
+Version : 1.0
+Date : 30/09/2026
+Projet : SIMTRADE — Trading DEMO fictif
